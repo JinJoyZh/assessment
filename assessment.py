@@ -110,11 +110,13 @@ G_vis.show('demo.html',notebook=False)
 
 
 
-
+print(G)
 print("1 节点数", len(G.nodes))
 print("2 边数", len(G.edges))
 print("6 平均度：", sum(dict(nx.degree(G)).values())/len(G.nodes))
 print("8 平均集聚系数", nx.average_clustering(G))
+
+
 try:
     print("9 平均最短路径", nx.average_shortest_path_length(G))
     print("10 网络平均效率", 1/nx.average_shortest_path_length(G))
