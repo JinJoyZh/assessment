@@ -1,129 +1,112 @@
-import networkx as nx
+
+import collections
+import json
+from flask import Flask, jsonify, request
 import numpy as np
-import random
-from pyvis.network import Network
-import pandas as pd
-# Define the number of nodes and edges
-num_nodes = 20
-num_edges = 200
-
-# Define the node types and edge types
-node_types = ['S', 'P', 'C', 'T']
-edge_types = ['C_to_C', 'S_to_S', 'T_to_T', 'P_to_P',
-              'S_to_C', 'C_to_P', 'P_to_C', 'C_to_T']
-## 问题1：是否可以把同类型间链接和不同类型之间链接区别开？
-## 问题2：'C_to_C':'通信协同、接替、备份' 存在多种不同的关系，如何表示？ 设计三种'C_to_C1', 'C_to_C2', 'C_to_C3'？
-edge_labels = {'C_to_C':'通信协同、接替、备份','S_to_S':'侦察协同', 'T_to_T':'打击协同', 'P_to_P':'指控协同',
-               'S_to_C':'信息上报', 'C_to_P':'通信关系', 'P_to_C':'通信关系', 'C_to_T':'指控关系'}
-node_labels = {'S':'侦察节点',
-                'P':'指控节点',
-                'C':'通信节点',
-                'T':'打击节点'}
+import networkx as nx
+import matplotlib.pyplot as plt
 
 
-# Define allowed connections for each node type with 80% probability
-allowed_connections = {
-    'S': ['S','C'],
-    'P': ['P', 'C'],
-    'C': ['C', 'P', 'T'],
-    'T': ['T']
+from louvain import Louvain
+
+
+server = Flask(__name__)
+
+EDGE_WEIGHTS = {
+    "C_to_C": np.ones(1),   #edge类型为 通信协同、接替、备份 的权重值
+    "T_to_T": np.ones(1),   #edge类型为 打击协同  的权重值
+    "P_to_C": np.ones(1),   #edge类型为 通信关系  的权重值
+    "S_to_S": np.ones(1),   #edge类型为 侦查协同  的权重值
+    "T_to_T": np.ones(1),   #edge类型为 打击协同  的权重值
+    "S_to_C": np.ones(1),   #edge类型为 信息上报  的权重值
+    "C_to_T": np.ones(1),   #edge类型为 指控关系  的权重值
+    "C_to_P": np.ones(1),   #edge类型为 通信关系  的权重值
+    "P_to_P": np.ones(1)    #edge类型为 指控协同  的权重值
 }
 
-# Define colors for each node type and edge type
-node_colors_dict = {'S': 'red', 'P': 'green', 'C': 'blue', 'T': 'yellow'}
-edge_colors_dict = {'C_to_C': 'red', 'S_to_S': 'yellow', 'T_to_T': 'black','P_to_P': 'green', 
-                    'S_to_C': 'pink', 'C_to_P': 'orange', 'P_to_C': 'blue','C_to_T':'purple'}
-                    # 'unknown': 'black'}
-colors_HEX_dict={'red':'#FF0000',
-                 'green': '#008000',
-                 'blue': '#0000FF',
-                 'yellow':'#FFFF00',
-                 'purple':'#800080',
-                 'pink':'#FFC0CB', 
-                 'orange':'#FFA500', 
-                 'black':'#000000'}
-# Randomly assign types to the nodes
-node_type_assignments = random.choices(node_types, k=num_nodes)
-
-# Create the graph
-G = nx.DiGraph()
-
-# Add nodes to the graph with their types
-for i in range(num_nodes):
-    G.add_node(i, node_type=node_type_assignments[i],
-        color=colors_HEX_dict[node_colors_dict[node_type_assignments[i]]],
-        label=str(i))
-
-# Add edges to the graph
-for i in range(num_edges):
-    source = random.randint(0, num_nodes-1)
-    source_type = G.nodes[source]['node_type']
-
-    # Decide if we're following the allowed connections (80% chance) or connecting randomly (20% chance)
-    if random.random() < 0.8:
-        # Follow the allowed connections
-        target_type = random.choice(allowed_connections[source_type])
-        possible_targets = [n for n in G.nodes() if G.nodes[n]['node_type'] == target_type]
-        if not possible_targets:  # If no possible targets of required type, connect randomly
-            target = random.randint(0, num_nodes-1)
-        else:
-            target = random.choice(possible_targets)
-    else:
-        # Connect randomly
-        target = random.randint(0, num_nodes-1)
-
-    edge_type = source_type + '_to_' + G.nodes[target]['node_type']
-    if edge_type not in edge_types:
-        continue
-        edge_type = 'unknown'
-    G.add_edge(source, target, edge_type=edge_type,color=colors_HEX_dict[edge_colors_dict[edge_type]],label=edge_labels[edge_type])
-
-# Define the color map for the nodes
-node_colors = [node_colors_dict[G.nodes[node]['node_type']] for node in G.nodes()]
-# Define the color map for the edges
-edge_colors = [edge_colors_dict[G.edges[edge]['edge_type']] for edge in G.edges()]
-
-
-# 图例
-for i in range(len(node_types)):
-    G.add_node(i+num_nodes,node_type=node_types[i], 
-        color=colors_HEX_dict[node_colors_dict[node_types[i]]],
-        label=node_types[i]+'：'+node_labels[node_types[i]],x=-700,y=-300+i*60,shape='box',
-        size=20,widthConstraint=100, font={'size': 20},physics=False)
+@server.route('/assess', methods=['POST'])
+def on_receive_data():
+    try:
+        msg = request.get_json()
+        print(msg)
+    except Exception as e:
+        print(e)
+        return jsonify({'error': '请求失败'}), 400
     
-for i in range(len(edge_types)):
-    G.add_node(i+num_nodes+len(node_types),node_type=edge_types[i], 
-        color=colors_HEX_dict[edge_colors_dict[edge_types[i]]],
-        label=edge_types[i]+'：'+edge_labels[edge_types[i]],x=700,y=-300+i*60,shape='box',
-        size=20,widthConstraint=200, font={'size': 20},physics=False)
+    global result
+    if msg:
+        try:
+            result = process_data(msg)
+        except Exception as e:
+            return jsonify({'error': '处理数据失败'}), 666
+    if not result:
+        result = 'error'
+    return result
 
+#构造网络
+def construct_graph(edge_json):#输入初始文件的路径，构造一个有起点、终点、边权的网络
+    G=collections.defaultdict(dict)#设置空白默认字典
+    for edge in edge_json:
+        v_i=int(edge["source_node_id"])
+        v_j=int(edge["target_node_id"])
+        edge_type = edge["edge_type"]
+        w = EDGE_WEIGHTS[edge_type]
+        G[v_i][v_j]=w
+        G[v_j][v_i]=w
+    return G
 
-# 建图、保存
-G_vis = Network(1080,1920, directed=True)
-G_vis.repulsion()
-G_vis.from_nx(G)
-G_vis.toggle_stabilization(True)
-G_vis.toggle_hide_edges_on_drag(True) # 拖动节点时隐藏边
+def process_data(msg):
+    # edge.json is used for test
+    with open("data/edge.json",'r') as load_f:
+        msg = json.load(load_f)
+    G = construct_graph(msg)
+    algorithm = Louvain(G)
+    communities = algorithm.execute() #集群结构       
+    #计算基础指标
+    G=nx.to_networkx_graph(G)
+    node_num = len(G.nodes)                                                 # 1 节点数      
+    edge_num = len(G.edges)                                                 # 2 度
+    degree = sum(dict(nx.degree(G)).values())/len(G.nodes)                  # 6 平均度
+    clustering_coefficient = nx.average_clustering(G)                       # 8 平均集聚系数 - 由集群数量和规模决定
+    average_shortest_path_length = 0
+    average_network_efficiency = 0
+    try:
+        average_shortest_path_length = nx.average_shortest_path_length(G)   # 9 平均最短路径
+        average_network_efficiency = 1/nx.average_shortest_path_length(G)   # 10 网络平均效率 ｜ 介数
+    except:
+        print('非强连接图，无法计算平均最短路径与网络平均效率')
+    link_node_ratio = len(G.edges)/len(G.nodes)                             # 12 链路节点比
+    A = np.array(nx.adjacency_matrix(G).todense())  # 从图G中获取邻接矩阵
+    eigenvalue, _ = np.linalg.eig(A)  # 求解特征值
+    cne = np.max(eigenvalue) / node_num                                     # 13 散度
+    contivity = nx.number_connected_components(G)                           # 14 连通度
 
-G_vis.show_buttons(filter_=['physics'])
-G_vis.show('demo.html',notebook=False)
+    #计算能力效果 （忽略 网络重心分布及数量/中立率的影响）
+    # a 抗毁性  根据 （网络重心分布及数量）/连通度/节点链路比/介数 计算
+    invulnerability = 0.33 * contivity + 0.33 * link_node_ratio + 0.33 * average_network_efficiency
+    # b 重组性  根据 (网络重心分布及数量)/连通度 计算                                          
+    recombination = contivity
+    # c 分散性  根据 (网络重心分布及数量)/介数/集群数量和规模 计算                                             
+    dispersion = 0.5 * clustering_coefficient + 0.5 * average_network_efficiency 
+    # d 隐蔽性  根据 集群数量和规模/散度 计算                                         
+    concealment = 0.5 * clustering_coefficient + 0.5 * cne   
+    # e 邻近性  根据 节点数量/(网络重心分布及数量)/集群数量和规模 计算                                      
+    proximity = 0.5 * node_num + 0.5 * clustering_coefficient              
+    # f 灵活性  根据 度/连通度 计算          
+    flexibility = 0.5 * edge_num + 0.5 * contivity                          
+    # g 适应性  根据 度/连通度/介数/(中立率) 计算                   
+    adaptability = 0.33 * edge_num + 0.33 * contivity + 0.33 * average_network_efficiency         
+    # h 高效性  根据 (网络重心分布及数量)/介数/连通度 计算                                               
+    efficiency = 0.5 * average_network_efficiency + 0.5 * contivity                                                
+    return {"抗毁性": invulnerability,
+            "重组性": recombination,
+            "分散性": dispersion,
+            "隐蔽性": concealment,
+            "邻近性": proximity,
+            "灵活性": flexibility,
+            "适应性": adaptability,
+            "高效性": efficiency
+            }              
 
-
-
-print(G)
-print("1 节点数", len(G.nodes))
-print("2 边数", len(G.edges))
-print("6 平均度：", sum(dict(nx.degree(G)).values())/len(G.nodes))
-print("8 平均集聚系数", nx.average_clustering(G))
-
-try:
-    print("9 平均最短路径", nx.average_shortest_path_length(G))
-    print("10 网络平均效率", 1/nx.average_shortest_path_length(G))
-except:
-    print('非强连接图，无法计算平均最短路径与网络平均效率')
-print("12 链路节点比", len(G.edges)/len(G.nodes))
-
-A = np.array(nx.adjacency_matrix(G).todense())  # 从图G中获取邻接矩阵
-eigenvalue, _ = np.linalg.eig(A)  # 求解特征值
-cne = np.max(eigenvalue) / num_nodes  # 计算CNE效能指标
-print("13 节点能效", cne)
+if __name__ == '__main__':
+    server.run()

@@ -1,35 +1,9 @@
 import collections
+import json
 import numpy as np
 import random
 import networkx as nx
 import matplotlib.pyplot as plt
-import scipy as sp
-import community
-
-weights = {
-    "C_to_C": np.ones(1),   #edge类型为 通信协同、接替、备份 的权重值
-    "T_to_T": np.ones(1),   #edge类型为 打击协同  的权重值
-    "P_to_C": np.ones(1),   #edge类型为 通信关系  的权重值
-    "S_to_S": np.ones(1),   #edge类型为 侦查协同  的权重值
-    "T_to_T": np.ones(1),   #edge类型为 打击协同  的权重值
-    "S_to_C": np.ones(1),   #edge类型为 信息上报  的权重值
-    "C_to_T": np.ones(1)    #edge类型为 指控关系  的权重值
-}
-
-#构造网络
-def construct_graph(path):#输入初始文件的路径，构造一个有起点、终点、边权的网络
-    G=collections.defaultdict(dict)#设置空白默认字典
-    with open(path) as txt:
-        for line in txt:
-            vertices=line.strip().split() 
-            # .strip()删除字符串line开头结尾处的空格 # .split()按照空格分隔
-            # 返回一个列表，含有2个字符串元素
-            v_i=int(vertices[0])
-            v_j=int(vertices[1])
-            w=np.ones(1)#如果是加权网络，w为权值
-            G[v_i][v_j]=w
-            G[v_j][v_i]=w
-    return G
 
 #给节点分配社团
 class Vertex():
@@ -46,10 +20,10 @@ class Louvain():
         self._G = G  # G是一个嵌套字典
         self._m = 0  # 边数量
         # 下面两个空字典存放信息
-        self._cid_vertices = {}  # 需维护的关于社区的信息(社区编号,其中包含的结点编号的集合)
+        self._cid_vertices = {}  # 需维护的关于集群的信息(集群编号,其中包含的结点编号的集合)
         self._vid_vertex = {}    # 需维护的关于节点的信息(节点编号，相应的Vertex实例)
         for vid in self._G.keys(): # self._G.keyds()字典的键值列表
-            # 含vid得社区名为vid,社区用列表表示，必含有Vid
+            # 含vid得集群名为vid,集群用列表表示，必含有Vid
             self._cid_vertices[vid] = set([vid]) 
             
             # 对于顶点vid进行‘类初始化 class Vertex'
@@ -67,7 +41,7 @@ class Louvain():
             can_stop = True  # 第一阶段是否可终止
             for v_vid in visit_sequence:
                 # 随机选择第一个节点v_vid(随机体现在shuffle),
-                # 其'属性_vid_vertex'是对节点实例化后，令'属性_cid'(即节点所在得社区编号)赋值
+                # 其'属性_vid_vertex'是对节点实例化后，令'属性_cid'(即节点所在得集群编号)赋值
                 v_cid = self._vid_vertex[v_vid]._cid
                 
                 # 假设G={1102:{1221:2,1321:3},1221:{1102:2,1456:4}}
@@ -78,32 +52,32 @@ class Louvain():
                 cid_Q = {}
                 # G[1102].keys()=[1221,1321],即节点1102得邻居
                 for w_vid in self._G[v_vid].keys():
-                    w_cid = self._vid_vertex[w_vid]._cid  # 邻居所在得社区编号
+                    w_cid = self._vid_vertex[w_vid]._cid  # 邻居所在得集群编号
                     if w_cid in cid_Q:
-                        continue    # 若邻居w_ci的社区在 字典cid_Q中则不操作
+                        continue    # 若邻居w_ci的集群在 字典cid_Q中则不操作
                     else:   
                         '''
-                        _cid_vertices[w_cid]：表示编号为w_cid的社区，k是社区w_cid的节点
+                        _cid_vertices[w_cid]：表示编号为w_cid的集群，k是集群w_cid的节点
                          G[k].values()：是权重值
                          sum(self._G[k].values()) ：节点k的所有出边的边总数
                          _vid_vertex[k]._kin： 表示对节点k的‘属性k_in’(自环边)
-                         sum([k的所有边(出边+自环边)])：社区w_cid的内部边+连接边 
+                         sum([k的所有边(出边+自环边)])：集群w_cid的内部边+连接边 
                         '''
                         tot = sum(
                             [sum(self._G[k].values()) + self._vid_vertex[k]._kin \
                             for k in self._cid_vertices[w_cid]])
                         '''
                          v_vid节点的邻居w_vid的
-                         v_vid的社区编号v_cid；w_vid的社区编号为w_cid
-                         如果v_vid与其邻居w_vid的社区编号相同，则移除v_vid后计算社团的边权重之和
+                         v_vid的集群编号v_cid；w_vid的集群编号为w_cid
+                         如果v_vid与其邻居w_vid的集群编号相同，则移除v_vid后计算社团的边权重之和
                          '''
                         if w_cid == v_cid:
                             tot -= k_v
                         
                         '''
-                        _cid_vertices[w_cid]:表示社区编号为w_cid的社区，k是社区内的节点
+                        _cid_vertices[w_cid]:表示集群编号为w_cid的集群，k是集群内的节点
                         G[v_vid].items():G[1102].items()=dict_items([(1221, 2), (1321, 3)])
-                        k_v_in:当遍历节点v_vid的邻居时判断k如果是w_cid社区内的节点，则求权重之和
+                        k_v_in:当遍历节点v_vid的邻居时判断k如果是w_cid集群内的节点，则求权重之和
                         '''                                             
                         k_v_in = sum([v for k, v in self._G[v_vid].items() if k in self._cid_vertices[w_cid]])
                         
@@ -134,13 +108,13 @@ class Louvain():
         cid_vertices = {}
         vid_vertex = {}
         '''
-        _cid_vertices:字典，键为社区编号，值为对应社区中的节点构成的列表
+        _cid_vertices:字典，键为集群编号，值为对应集群中的节点构成的列表
         _cid_vertices={1102:[1102,1321],1456:[1221,1456],1421:[1421],1321:[],1221:[]}
          '''
         for cid, vertices in self._cid_vertices.items():
             if len(vertices) == 0:
-                continue   # 如果是空社区跳过
-            # 将非空社团的作为新节点，新节点编号为社区编号，社区编号不变，节点设置为空集
+                continue   # 如果是空集群跳过
+            # 将非空社团的作为新节点，新节点编号为集群编号，集群编号不变，节点设置为空集
             new_vertex = Vertex(cid, cid, set()) 
             # 更新新节点的各种属性
             for vid in vertices:
@@ -207,26 +181,45 @@ class Louvain():
                 self.second_stage()
             else:        # 否则，跳出循环
                 break
-        return self.get_communities() # 返回得到的社团
+        communities = self.get_communities()
+        communities = sorted(communities, key=lambda b: -len(b)) # 按集群大小排序
+        return communities # 返回得到的社团
 
 #主函数进行调用
 if __name__ == '__main__':
-    G = construct_graph('/Users/jinjoy/resource/效能评估/集群数量和集群规模/Louvain_Algorithm-main/email-Eu-core-department-labels.txt')
+
+    EDGE_WEIGHTS = {
+    "C_to_C": np.ones(1),   #edge类型为 通信协同、接替、备份 的权重值
+    "T_to_T": np.ones(1),   #edge类型为 打击协同  的权重值
+    "P_to_C": np.ones(1),   #edge类型为 通信关系  的权重值
+    "S_to_S": np.ones(1),   #edge类型为 侦查协同  的权重值
+    "T_to_T": np.ones(1),   #edge类型为 打击协同  的权重值
+    "S_to_C": np.ones(1),   #edge类型为 信息上报  的权重值
+    "C_to_T": np.ones(1),   #edge类型为 指控关系  的权重值
+    "C_to_P": np.ones(1),   #edge类型为 通信关系  的权重值
+    "P_to_P": np.ones(1)    #edge类型为 指控协同  的权重值
+    }
+    with open("data/edge.json",'r') as load_f:
+        msg = json.load(load_f)
+    G=collections.defaultdict(dict)#设置空白默认字典
+    for edge in msg:
+        v_i=int(edge["source_node_id"])
+        v_j=int(edge["target_node_id"])
+        edge_type = edge["edge_type"]
+        w = EDGE_WEIGHTS[edge_type]
+        G[v_i][v_j]=w
+        G[v_j][v_i]=w
     algorithm = Louvain(G)
     communities = algorithm.execute()
-    # 按照社区大小从大到小排序输出
-    communities = sorted(communities, key=lambda b: -len(b)) # 按社区大小排序
+    print("集群规模", len(communities))
+    #集群划分结果可视化           
+    Graph=nx.to_networkx_graph(G)
     count = 0
     result=list(range(0,len(G)))
-    print(result)
     for communitie in communities:
         count += 1
-        print("社区", count, " ", communitie)#输出结果
+        print("集群", count, " ", communitie)#输出结果
         for i in communitie:
-            result[i]=count
-
-
-#社区划分结果可视化           
-Graph=nx.to_networkx_graph(G)
-nx.draw_spring(Graph, cmap=plt.cm.RdYlBu, node_color = result, node_size=30, with_labels=False)
-plt.show()
+            result[i]=count  
+    nx.draw_spring(Graph, cmap=plt.cm.RdYlBu, node_color = result, node_size=30, with_labels=False)
+    plt.show()

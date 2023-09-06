@@ -5,7 +5,6 @@ import json
 
 def csv_to_json(csvFilePath, jsonFilePath):
     jsonArray = []
-      
     #read csv file
     with open(csvFilePath, encoding='utf-8') as csvf: 
         #load csv file data using csv library's dictionary reader

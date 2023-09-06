@@ -2,3 +2,4 @@ node_modules/*
 .idea/*
 data/*
 *.html
+__pycache__/*
