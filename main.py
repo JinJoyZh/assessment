@@ -116,10 +116,14 @@ print("2 边数", len(G.edges))
 print("6 平均度：", sum(dict(nx.degree(G)).values())/len(G.nodes))
 print("8 平均集聚系数", nx.average_clustering(G))
 
-
 try:
     print("9 平均最短路径", nx.average_shortest_path_length(G))
     print("10 网络平均效率", 1/nx.average_shortest_path_length(G))
 except:
     print('非强连接图，无法计算平均最短路径与网络平均效率')
 print("12 链路节点比", len(G.edges)/len(G.nodes))
+
+A = np.array(nx.adjacency_matrix(G).todense())  # 从图G中获取邻接矩阵
+eigenvalue, _ = np.linalg.eig(A)  # 求解特征值
+cne = np.max(eigenvalue) / num_nodes  # 计算CNE效能指标
+print("13 节点能效", cne)

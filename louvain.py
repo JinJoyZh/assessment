@@ -6,6 +6,16 @@ import matplotlib.pyplot as plt
 import scipy as sp
 import community
 
+weights = {
+    "C_to_C": np.ones(1),   #edge类型为 通信协同、接替、备份 的权重值
+    "T_to_T": np.ones(1),   #edge类型为 打击协同  的权重值
+    "P_to_C": np.ones(1),   #edge类型为 通信关系  的权重值
+    "S_to_S": np.ones(1),   #edge类型为 侦查协同  的权重值
+    "T_to_T": np.ones(1),   #edge类型为 打击协同  的权重值
+    "S_to_C": np.ones(1),   #edge类型为 信息上报  的权重值
+    "C_to_T": np.ones(1)    #edge类型为 指控关系  的权重值
+}
+
 #构造网络
 def construct_graph(path):#输入初始文件的路径，构造一个有起点、终点、边权的网络
     G=collections.defaultdict(dict)#设置空白默认字典
