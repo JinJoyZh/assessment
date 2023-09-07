@@ -1,6 +1,5 @@
 
 import collections
-import json
 import numpy as np
 import networkx as nx
 
@@ -24,18 +23,15 @@ EDGE_WEIGHTS = {
 def construct_graph(edge_json):#输入初始文件的路径，构造一个有起点、终点、边权的网络
     G=collections.defaultdict(dict)#设置空白默认字典
     for edge in edge_json:
-        v_i=int(edge["source_node_id"])
-        v_j=int(edge["target_node_id"])
-        edge_type = edge["edge_type"]
-        w = EDGE_WEIGHTS[edge_type]
+        v_i=int(edge["source"])
+        v_j=int(edge["target"])
+        # edge_type = edge["edge_type"]
+        w = np.ones(1)
         G[v_i][v_j]=w
         G[v_j][v_i]=w
     return G
 
 def process_data(msg):
-    # edge.json is used for test
-    with open("data/edge.json",'r') as load_f:
-        msg = json.load(load_f)
     G = construct_graph(msg)
     algorithm = Louvain(G)
     communities = algorithm.execute() #集群结构       

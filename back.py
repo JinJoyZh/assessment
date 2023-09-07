@@ -81,17 +81,8 @@ class MainHandler(tornado.web.RequestHandler):
             nodes=GlobalVars.get('nodes')
             edges=GlobalVars.get('edges')
             nodes_json=nodes.to_json(orient="records")
-            edges_list=[]
-            for _,row in edges.iterrows():
-                source=row['source']
-                target=row['target']
-                labels=row['labels']
-                curr_dict={}
-                curr_dict['source']=source
-                curr_dict['target']=target
-                curr_dict['labels']=[{"attrs": {"text": {"text": labels}}}]
-                edges_list.append(curr_dict)
-            result=json.dumps({'nodes':eval(nodes_json),'edges':edges_list})
+            edges_json=nodes.to_json(orient="records")
+            result=json.dumps({'nodes':eval(nodes_json),'edges':eval(edges_json)})
             return result
         except:
             return 0
@@ -109,27 +100,28 @@ class MainHandler(tornado.web.RequestHandler):
 
     def update_node(self,new_node_str):
         nodes=GlobalVars.get('nodes')
-        try:
-            new_node=eval(new_node_str)
-            if new_node['id'] not in set(nodes['id']):
-                return 0
-            else:
-                delete_index=nodes.loc[nodes['id']==new_node['id']].index
-                if len(delete_index)==1:
-                    nodes.loc[delete_index]=[new_node[key] for key in nodes.columns]
-                    GlobalVars.set('nodes', nodes)
-                    return 1
-                else:
-                    return 0
-        except:
+        # try:
+        new_node=eval(new_node_str)
+        print(new_node)
+        if new_node['id'] not in set(nodes['id']):
             return 0
+        else:
+            update_index=nodes.loc[nodes['id']==new_node['id']].index
+            if len(update_index)==1:
+                nodes.loc[update_index]=[new_node[key] for key in nodes.columns]
+                GlobalVars.set('nodes', nodes)
+                return 1
+            else:
+                return 0
+        # except:
+        #     return 0
                 
     def delete(self,delete):
         try:
             nodes=GlobalVars.get('nodes')
             edges=GlobalVars.get('edges')
-            if len(edges.loc[(edges['labels']=='backup')&(edges['target']==delete)])>0:
-                backup=edges.loc[(edges['labels']=='backup')&(edges['target']==delete),'source'].iloc[0]
+            if len(edges.loc[(edges['labels']=={'attrs': {'text': {'text': 'backup'}}})&(edges['target']==delete)])>0:
+                backup=edges.loc[(edges['labels']=={'attrs': {'text': {'text': 'backup'}}})&(edges['target']==delete),'source'].iloc[0]
                 backup_edges=edges.loc[(edges['source']!=delete)&(edges['target']!=delete)&((edges['source']==backup)|(edges['target']==backup))]
                 delete_edges=edges.loc[(edges['source']!=backup)&(edges['target']!=backup)&((edges['source']==delete)|(edges['target']==delete))]
                 other_edges=edges.loc[(edges['source']!=backup)&(edges['target']!=backup)&(edges['source']!=delete)&(edges['target']!=delete)]
@@ -160,20 +152,20 @@ class MainHandler(tornado.web.RequestHandler):
                 self.finish({'result': json_result})
         if func=='save':
             path=self.get_argument('path')
-            assessment=self.save(path)
-            self.finish({'result': assessment})
+            result=self.save(path)
+            self.finish({'result': result})
         if func=='update':
             new_node_str=self.get_argument('new_node')
-            assessment=self.update_node(new_node_str)
-            self.finish({'result': assessment})
+            result=self.update_node(new_node_str)
+            self.finish({'result': result})
         if func=='delete':
             node_id=self.get_argument('node_id')
-            assessment=self.delete(node_id)
-            self.finish({'result': assessment})
+            result=self.delete(node_id)
+            self.finish({'result': result})
         if func=='assess':
             path=self.get_argument('path')
             assessment = self.assess(path)
-            if assessment == "{}":
+            if assessment == {}:
                 result = {'result': 0}
             else:
                 result = {'result': 1,
@@ -181,15 +173,16 @@ class MainHandler(tornado.web.RequestHandler):
                 result = json.dumps(result, ensure_ascii=False) 
             self.finish(result)
 
+
     def assess(self, path=os.path.abspath(os.path.dirname(__file__))):
         edge_path = os.path.join(path,'edges.csv')
-        json_str = csv_to_json(edge_path)
         assessment = {}
-        if json_str:
-            try:
-                assessment = process_data(json_str)
-            except Exception as e:
-                return assessment
+        try:
+            json_str = csv_to_json(edge_path)
+            assessment = process_data(json_str)
+        except Exception as e:
+            print(e)
+            return assessment
         return assessment
  
 if __name__ == "__main__":

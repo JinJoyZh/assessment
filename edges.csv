@@ -1,201 +1,201 @@
-,source,target,labels
-0,S278,C45,信息上报
-1,S278,S218,侦察、打击、指控、通信协同
-2,T37,T46,侦察、打击、指控、通信协同
-3,C45,P38,通信关系
-4,S444,S183,侦察、打击、指控、通信协同
-5,S157,S325,侦察、打击、指控、通信协同
-6,S418,S278,侦察、打击、指控、通信协同
-7,S398,S340,侦察、打击、指控、通信协同
-8,S398,C45,信息上报
-9,C4,C22,备份关系
-10,S317,S340,侦察、打击、指控、通信协同
-11,C22,T37,指控关系
-12,S340,S218,侦察、打击、指控、通信协同
-13,S183,C22,信息上报
-14,S398,S444,侦察、打击、指控、通信协同
-15,C4,P38,通信关系
-16,S444,C4,信息上报
-17,C22,C45,侦察、打击、指控、通信协同
-18,S340,S398,侦察、打击、指控、通信协同
-19,S418,S157,侦察、打击、指控、通信协同
-20,S398,C4,信息上报
-21,S317,S278,侦察、打击、指控、通信协同
-22,S157,S444,侦察、打击、指控、通信协同
-23,S371,C4,信息上报
-24,T37,T53,侦察、打击、指控、通信协同
-25,S325,S340,侦察、打击、指控、通信协同
-26,S444,S340,侦察、打击、指控、通信协同
-27,S278,S325,侦察、打击、指控、通信协同
-28,S444,C4,信息上报
-29,C4,T46,指控关系
-30,S371,C4,信息上报
-31,S183,S317,侦察、打击、指控、通信协同
-32,S183,C4,信息上报
-33,T37,T46,侦察、打击、指控、通信协同
-34,P5,P38,侦察、打击、指控、通信协同
-35,S371,S278,侦察、打击、指控、通信协同
-36,S183,C22,信息上报
-37,S183,S218,侦察、打击、指控、通信协同
-38,S398,S183,侦察、打击、指控、通信协同
-39,S325,S418,侦察、打击、指控、通信协同
-40,T37,T46,侦察、打击、指控、通信协同
-41,P38,C45,通信关系
-42,P38,C22,通信关系
-43,S157,S325,侦察、打击、指控、通信协同
-44,S418,S340,侦察、打击、指控、通信协同
-45,S157,S278,侦察、打击、指控、通信协同
-46,S398,C4,信息上报
-47,S183,S444,侦察、打击、指控、通信协同
-48,S325,S371,侦察、打击、指控、通信协同
-49,S183,S278,侦察、打击、指控、通信协同
-50,T13,T46,侦察、打击、指控、通信协同
-51,S371,S157,侦察、打击、指控、通信协同
-52,S325,S398,侦察、打击、指控、通信协同
-53,S325,S157,侦察、打击、指控、通信协同
-54,S157,S183,侦察、打击、指控、通信协同
-55,S157,C22,信息上报
-56,S278,S340,侦察、打击、指控、通信协同
-57,T13,T53,侦察、打击、指控、通信协同
-58,S278,S325,侦察、打击、指控、通信协同
-59,S157,S183,侦察、打击、指控、通信协同
-60,S278,S325,侦察、打击、指控、通信协同
-61,S317,S398,侦察、打击、指控、通信协同
-62,S157,S340,侦察、打击、指控、通信协同
-63,S317,C4,信息上报
-64,S157,S325,侦察、打击、指控、通信协同
-65,S371,S278,侦察、打击、指控、通信协同
-66,S340,S325,侦察、打击、指控、通信协同
-67,S398,S371,侦察、打击、指控、通信协同
-68,S444,C45,信息上报
-69,S317,C22,信息上报
-70,S218,S398,侦察、打击、指控、通信协同
-71,P5,C4,通信关系
-72,S317,S183,侦察、打击、指控、通信协同
-73,C22,T13,指控关系
-74,T46,T53,侦察、打击、指控、通信协同
-75,C45,T46,指控关系
-76,C45,P38,通信关系
-77,S398,S418,侦察、打击、指控、通信协同
-78,S398,S278,侦察、打击、指控、通信协同
-79,C22,T37,指控关系
-80,S157,C22,信息上报
-81,S418,C22,信息上报
-82,T46,T37,侦察、打击、指控、通信协同
-83,S317,C45,信息上报
-84,S325,S371,侦察、打击、指控、通信协同
-85,S157,S340,侦察、打击、指控、通信协同
-86,S398,S183,侦察、打击、指控、通信协同
-87,S325,S371,侦察、打击、指控、通信协同
-88,S340,C4,信息上报
-89,S317,S325,侦察、打击、指控、通信协同
-90,T37,T13,侦察、打击、指控、通信协同
-91,C4,P5,通信关系
-92,S340,S317,侦察、打击、指控、通信协同
-93,S340,S444,侦察、打击、指控、通信协同
-94,C22,P38,通信关系
-95,S444,S157,侦察、打击、指控、通信协同
-96,S371,S340,侦察、打击、指控、通信协同
-97,T13,T53,侦察、打击、指控、通信协同
-98,S371,S444,侦察、打击、指控、通信协同
-99,S218,S325,侦察、打击、指控、通信协同
-100,S325,S317,侦察、打击、指控、通信协同
-101,T53,T46,侦察、打击、指控、通信协同
-102,S317,S157,侦察、打击、指控、通信协同
-103,T13,T37,侦察、打击、指控、通信协同
-104,S325,S444,侦察、打击、指控、通信协同
-105,C4,C22,侦察、打击、指控、通信协同
-106,S183,S317,侦察、打击、指控、通信协同
-107,S218,C4,信息上报
-108,S278,S398,侦察、打击、指控、通信协同
-109,S398,C45,信息上报
-110,S418,C4,信息上报
-111,S278,S444,侦察、打击、指控、通信协同
-112,S325,S371,侦察、打击、指控、通信协同
-113,S325,S340,侦察、打击、指控、通信协同
-114,S371,S183,侦察、打击、指控、通信协同
-115,T13,T53,侦察、打击、指控、通信协同
-116,C4,T13,指控关系
-117,S444,S325,侦察、打击、指控、通信协同
-118,S157,C45,信息上报
-119,S157,S398,侦察、打击、指控、通信协同
-120,S317,S325,侦察、打击、指控、通信协同
-121,S418,C4,信息上报
-122,S157,C45,信息上报
-123,T37,T13,侦察、打击、指控、通信协同
-124,S218,C45,信息上报
-125,S317,S444,侦察、打击、指控、通信协同
-126,S317,S444,侦察、打击、指控、通信协同
-127,S325,S278,侦察、打击、指控、通信协同
-128,S398,C45,信息上报
-129,S278,C22,信息上报
-130,S218,S183,侦察、打击、指控、通信协同
-131,S218,S325,侦察、打击、指控、通信协同
-132,S444,C4,信息上报
-133,S418,S398,侦察、打击、指控、通信协同
-134,S317,S218,侦察、打击、指控、通信协同
-135,S278,S444,侦察、打击、指控、通信协同
-136,T37,T46,侦察、打击、指控、通信协同
-137,S371,S418,侦察、打击、指控、通信协同
-138,S371,S325,侦察、打击、指控、通信协同
-139,S340,S157,侦察、打击、指控、通信协同
-140,S340,S325,侦察、打击、指控、通信协同
-141,S340,S325,侦察、打击、指控、通信协同
-142,C45,T37,指控关系
-143,S278,C4,信息上报
-144,S183,C4,信息上报
-145,S371,C4,信息上报
-146,P5,C22,通信关系
-147,S278,S157,侦察、打击、指控、通信协同
-148,P5,C22,通信关系
-149,T37,T13,侦察、打击、指控、通信协同
-150,S444,S183,侦察、打击、指控、通信协同
-151,S418,C45,信息上报
-152,S398,S325,侦察、打击、指控、通信协同
-153,S157,S325,侦察、打击、指控、通信协同
-154,S444,S278,侦察、打击、指控、通信协同
-155,S340,S444,侦察、打击、指控、通信协同
-156,S278,S340,侦察、打击、指控、通信协同
-157,S398,S183,侦察、打击、指控、通信协同
-158,S317,S325,侦察、打击、指控、通信协同
-159,S325,S418,侦察、打击、指控、通信协同
-160,P38,P5,侦察、打击、指控、通信协同
-161,S418,S325,侦察、打击、指控、通信协同
-162,S183,S157,侦察、打击、指控、通信协同
-163,S371,S340,侦察、打击、指控、通信协同
-164,S371,S325,侦察、打击、指控、通信协同
-165,T46,T53,侦察、打击、指控、通信协同
-166,C22,T37,指控关系
-167,S183,C4,信息上报
-168,S418,S218,侦察、打击、指控、通信协同
-169,S340,S325,侦察、打击、指控、通信协同
-170,S278,S340,侦察、打击、指控、通信协同
-171,S444,S218,侦察、打击、指控、通信协同
-172,C4,P38,通信关系
-173,T13,T46,侦察、打击、指控、通信协同
-174,S371,C4,信息上报
-175,S157,C22,信息上报
-176,T46,T37,侦察、打击、指控、通信协同
-177,C4,P38,通信关系
-178,S218,S317,侦察、打击、指控、通信协同
-179,S317,C45,信息上报
-180,C4,T37,指控关系
-181,S317,C4,信息上报
-182,T46,T13,侦察、打击、指控、通信协同
-183,S444,S157,侦察、打击、指控、通信协同
-184,P38,C4,通信关系
-185,S325,C45,信息上报
-186,S218,S371,侦察、打击、指控、通信协同
-187,S398,C22,信息上报
-188,S317,S340,侦察、打击、指控、通信协同
-189,S371,S325,侦察、打击、指控、通信协同
-190,S371,S218,侦察、打击、指控、通信协同
-191,S218,S371,侦察、打击、指控、通信协同
-192,P38,C22,通信关系
-193,S183,S398,侦察、打击、指控、通信协同
-194,S371,S218,侦察、打击、指控、通信协同
-195,S157,S218,侦察、打击、指控、通信协同
-196,S157,S371,侦察、打击、指控、通信协同
-197,S325,C22,信息上报
-198,S340,C45,信息上报
-199,S398,S325,侦察、打击、指控、通信协同
+,source,target,text,attrs,labels
+0,3,13,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+1,3,4,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+2,16,17,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+3,13,15,通信关系,{'line': {'stroke': '#008000'}},{'attrs': {'text': {'text': 'communicate'}}}
+4,10,2,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+5,1,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+6,9,3,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+7,0,5,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+8,0,13,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+9,11,12,备份关系,{'line': {'stroke': '#000000'}},{'attrs': {'text': {'text': 'backup'}}}
+10,7,5,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+11,12,16,指控关系,{'line': {'stroke': '#FFFF00'}},{'attrs': {'text': {'text': 'accuse'}}}
+12,5,4,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+13,2,12,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+14,0,10,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+15,11,15,通信关系,{'line': {'stroke': '#008000'}},{'attrs': {'text': {'text': 'communicate'}}}
+16,10,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+17,12,13,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+18,5,0,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+19,9,1,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+20,0,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+21,7,3,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+22,1,10,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+23,8,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+24,16,18,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+25,6,5,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+26,10,5,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+27,3,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+28,10,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+29,11,17,指控关系,{'line': {'stroke': '#FFFF00'}},{'attrs': {'text': {'text': 'accuse'}}}
+30,8,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+31,2,7,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+32,2,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+33,16,17,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+34,14,15,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+35,8,3,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+36,2,12,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+37,2,4,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+38,0,2,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+39,6,9,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+40,16,17,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+41,15,13,通信关系,{'line': {'stroke': '#008000'}},{'attrs': {'text': {'text': 'communicate'}}}
+42,15,12,通信关系,{'line': {'stroke': '#008000'}},{'attrs': {'text': {'text': 'communicate'}}}
+43,1,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+44,9,5,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+45,1,3,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+46,0,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+47,2,10,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+48,6,8,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+49,2,3,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+50,19,17,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+51,8,1,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+52,6,0,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+53,6,1,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+54,1,2,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+55,1,12,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+56,3,5,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+57,19,18,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+58,3,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+59,1,2,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+60,3,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+61,7,0,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+62,1,5,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+63,7,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+64,1,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+65,8,3,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+66,5,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+67,0,8,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+68,10,13,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+69,7,12,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+70,4,0,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+71,14,11,通信关系,{'line': {'stroke': '#008000'}},{'attrs': {'text': {'text': 'communicate'}}}
+72,7,2,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+73,12,19,指控关系,{'line': {'stroke': '#FFFF00'}},{'attrs': {'text': {'text': 'accuse'}}}
+74,17,18,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+75,13,17,指控关系,{'line': {'stroke': '#FFFF00'}},{'attrs': {'text': {'text': 'accuse'}}}
+76,13,15,通信关系,{'line': {'stroke': '#008000'}},{'attrs': {'text': {'text': 'communicate'}}}
+77,0,9,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+78,0,3,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+79,12,16,指控关系,{'line': {'stroke': '#FFFF00'}},{'attrs': {'text': {'text': 'accuse'}}}
+80,1,12,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+81,9,12,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+82,17,16,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+83,7,13,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+84,6,8,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+85,1,5,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+86,0,2,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+87,6,8,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+88,5,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+89,7,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+90,16,19,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+91,11,14,通信关系,{'line': {'stroke': '#008000'}},{'attrs': {'text': {'text': 'communicate'}}}
+92,5,7,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+93,5,10,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+94,12,15,通信关系,{'line': {'stroke': '#008000'}},{'attrs': {'text': {'text': 'communicate'}}}
+95,10,1,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+96,8,5,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+97,19,18,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+98,8,10,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+99,4,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+100,6,7,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+101,18,17,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+102,7,1,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+103,19,16,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+104,6,10,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+105,11,12,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+106,2,7,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+107,4,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+108,3,0,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+109,0,13,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+110,9,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+111,3,10,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+112,6,8,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+113,6,5,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+114,8,2,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+115,19,18,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+116,11,19,指控关系,{'line': {'stroke': '#FFFF00'}},{'attrs': {'text': {'text': 'accuse'}}}
+117,10,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+118,1,13,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+119,1,0,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+120,7,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+121,9,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+122,1,13,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+123,16,19,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+124,4,13,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+125,7,10,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+126,7,10,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+127,6,3,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+128,0,13,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+129,3,12,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+130,4,2,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+131,4,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+132,10,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+133,9,0,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+134,7,4,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+135,3,10,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+136,16,17,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+137,8,9,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+138,8,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+139,5,1,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+140,5,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+141,5,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+142,13,16,指控关系,{'line': {'stroke': '#FFFF00'}},{'attrs': {'text': {'text': 'accuse'}}}
+143,3,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+144,2,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+145,8,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+146,14,12,通信关系,{'line': {'stroke': '#008000'}},{'attrs': {'text': {'text': 'communicate'}}}
+147,3,1,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+148,14,12,通信关系,{'line': {'stroke': '#008000'}},{'attrs': {'text': {'text': 'communicate'}}}
+149,16,19,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+150,10,2,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+151,9,13,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+152,0,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+153,1,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+154,10,3,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+155,5,10,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+156,3,5,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+157,0,2,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+158,7,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+159,6,9,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+160,15,14,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+161,9,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+162,2,1,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+163,8,5,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+164,8,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+165,17,18,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+166,12,16,指控关系,{'line': {'stroke': '#FFFF00'}},{'attrs': {'text': {'text': 'accuse'}}}
+167,2,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+168,9,4,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+169,5,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+170,3,5,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+171,10,4,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+172,11,15,通信关系,{'line': {'stroke': '#008000'}},{'attrs': {'text': {'text': 'communicate'}}}
+173,19,17,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+174,8,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+175,1,12,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+176,17,16,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+177,11,15,通信关系,{'line': {'stroke': '#008000'}},{'attrs': {'text': {'text': 'communicate'}}}
+178,4,7,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+179,7,13,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+180,11,16,指控关系,{'line': {'stroke': '#FFFF00'}},{'attrs': {'text': {'text': 'accuse'}}}
+181,7,11,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+182,17,19,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+183,10,1,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+184,15,11,通信关系,{'line': {'stroke': '#008000'}},{'attrs': {'text': {'text': 'communicate'}}}
+185,6,13,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+186,4,8,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+187,0,12,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+188,7,5,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+189,8,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+190,8,4,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+191,4,8,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+192,15,12,通信关系,{'line': {'stroke': '#008000'}},{'attrs': {'text': {'text': 'communicate'}}}
+193,2,0,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+194,8,4,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+195,1,4,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+196,1,8,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}
+197,6,12,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+198,5,13,信息上报,{'line': {'stroke': '#0000FF'}},{'attrs': {'text': {'text': 'report'}}}
+199,0,6,侦察、打击、指控、通信协同,{'line': {'stroke': '#FF0000'}},{'attrs': {'text': {'text': 'collaborate'}}}

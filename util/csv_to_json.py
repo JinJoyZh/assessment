@@ -17,8 +17,8 @@ def csv_to_json(csvFilePath):
             jsonArray.append(row)
   
     #convert python jsonArray to JSON String and write to file
-    jsonString = json.dumps(jsonArray, indent=4)
-    return jsonString
+    # jsonString = json.dumps(jsonArray, indent=4)
+    return jsonArray
           
 
 if __name__ == "__main__":
