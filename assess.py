@@ -1,16 +1,12 @@
 
 import collections
 import json
-from flask import Flask, jsonify, request
 import numpy as np
 import networkx as nx
-import matplotlib.pyplot as plt
 
 
 from louvain import Louvain
 
-
-server = Flask(__name__)
 
 EDGE_WEIGHTS = {
     "C_to_C": np.ones(1),   #edge类型为 通信协同、接替、备份 的权重值
@@ -23,25 +19,6 @@ EDGE_WEIGHTS = {
     "C_to_P": np.ones(1),   #edge类型为 通信关系  的权重值
     "P_to_P": np.ones(1)    #edge类型为 指控协同  的权重值
 }
-
-@server.route('/assess', methods=['POST'])
-def on_receive_data():
-    try:
-        msg = request.get_json()
-        print(msg)
-    except Exception as e:
-        print(e)
-        return jsonify({'error': '请求失败'}), 400
-    
-    global result
-    if msg:
-        try:
-            result = process_data(msg)
-        except Exception as e:
-            return jsonify({'error': '处理数据失败'}), 666
-    if not result:
-        result = 'error'
-    return result
 
 #构造网络
 def construct_graph(edge_json):#输入初始文件的路径，构造一个有起点、终点、边权的网络
@@ -98,7 +75,8 @@ def process_data(msg):
     adaptability = 0.33 * edge_num + 0.33 * contivity + 0.33 * average_network_efficiency         
     # h 高效性  根据 (网络重心分布及数量)/介数/连通度 计算                                               
     efficiency = 0.5 * average_network_efficiency + 0.5 * contivity                                                
-    return {"抗毁性": invulnerability,
+    return {"state": "success",
+            "抗毁性": invulnerability,
             "重组性": recombination,
             "分散性": dispersion,
             "隐蔽性": concealment,
@@ -107,6 +85,3 @@ def process_data(msg):
             "适应性": adaptability,
             "高效性": efficiency
             }              
-
-if __name__ == '__main__':
-    server.run()

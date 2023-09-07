@@ -3,7 +3,7 @@
 import csv 
 import json 
 
-def csv_to_json(csvFilePath, jsonFilePath):
+def csv_to_json(csvFilePath):
     jsonArray = []
     #read csv file
     with open(csvFilePath, encoding='utf-8') as csvf: 
@@ -17,9 +17,8 @@ def csv_to_json(csvFilePath, jsonFilePath):
             jsonArray.append(row)
   
     #convert python jsonArray to JSON String and write to file
-    with open(jsonFilePath, 'w', encoding='utf-8') as jsonf: 
-        jsonString = json.dumps(jsonArray, indent=4)
-        jsonf.write(jsonString)
+    jsonString = json.dumps(jsonArray, indent=4)
+    return jsonString
           
 
 if __name__ == "__main__":
