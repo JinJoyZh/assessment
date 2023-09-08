@@ -5,7 +5,6 @@
 # 运行
 # python back.py
 
-
 # 读取csv文件，文件与该脚本放在同个文件夹下，成功返回json文本，失败返回0.
 # 无需参数，默认同目录下
 # http://127.0.0.1:8833/read?func=read&path
@@ -14,7 +13,8 @@
 
 
 # 修改节点（传入的new_node参数为str类型，一次只能改一个节点），成功返回1，失败返回0.
-# http://127.0.0.1:8833/update?func=update&new_node={"id":"S398","label":"S3","x":1,"y":1,"width":80,"height":40,"shape":"circle"}
+# fill无#,需要再次处理
+# http://127.0.0.1:8833/update?func=update&new_node={"id":"S398","label":"S3","x":1,"y":1,"width":80,"height":40,"shape":"circle","text":"无人侦察机","attrs":{"body":{"fill":"FFA500"}}}
 
 
 # 删除节点1，成功返回json文本，失败返回0.
@@ -80,8 +80,12 @@ class MainHandler(tornado.web.RequestHandler):
         try:
             nodes=GlobalVars.get('nodes')
             edges=GlobalVars.get('edges')
+            edges['labels']=edges['labels'].apply(lambda x:eval(x))
+            edges['attrs']=edges['attrs'].apply(lambda x:eval(x))
+            nodes['attrs']=nodes['attrs'].apply(lambda x:eval(x))
+            
             nodes_json=nodes.to_json(orient="records")
-            edges_json=nodes.to_json(orient="records")
+            edges_json=edges.to_json(orient="records")
             result=json.dumps({'nodes':eval(nodes_json),'edges':eval(edges_json)})
             return result
         except:
