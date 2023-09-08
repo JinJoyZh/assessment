@@ -15,15 +15,15 @@ http://127.0.0.1:8833/read?func=read&path=C:\Users\dhujq\Desktop\DB\my\脚本
 
 修改节点（传入的new_node参数为str类型，一次只能改一个节点），成功返回1，失败返回0.
 fill无#,需要再次处理
-http://127.0.0.1:8833/update?func=update&new_node={"id":"S398","label":"S3","x":1,"y":1,"width":80,"height":40,"shape":"circle","text":"无人侦察机","attrs":{"body":{"fill":"FFA500"}}}
+http://127.0.0.1:8833/update?func=update&new_node={"id":0,"label":"S3","x":1,"y":1,"width":80,"height":40,"shape":"circle","text":"无人侦察机","attrs":{"body":{"fill":"FFA500"}}}
 
 
 
 删除节点1，成功返回json文本，失败返回0.
-http://127.0.0.1:8833/delete?func=delete&node_id=S398
+http://127.0.0.1:8833/delete?func=delete&node_id=0
 
 删除节点2,该节点有备份节点，成功返回json文本，失败返回0.
-http://127.0.0.1:8833/delete?func=delete&node_id=C22
+http://127.0.0.1:8833/delete?func=delete&node_id=12
 
 
 

@@ -5,6 +5,8 @@
 # 运行
 # python back.py
 
+
+
 # 读取csv文件，文件与该脚本放在同个文件夹下，成功返回json文本，失败返回0.
 # 无需参数，默认同目录下
 # http://127.0.0.1:8833/read?func=read&path
@@ -12,16 +14,22 @@
 # http://127.0.0.1:8833/read?func=read&path=C:\Users\dhujq\Desktop\DB\my\脚本
 
 
+
+
+
 # 修改节点（传入的new_node参数为str类型，一次只能改一个节点），成功返回1，失败返回0.
 # fill无#,需要再次处理
-# http://127.0.0.1:8833/update?func=update&new_node={"id":"S398","label":"S3","x":1,"y":1,"width":80,"height":40,"shape":"circle","text":"无人侦察机","attrs":{"body":{"fill":"FFA500"}}}
+# http://127.0.0.1:8833/update?func=update&new_node={"id":0,"label":"S3","x":1,"y":1,"width":80,"height":40,"shape":"circle","text":"无人侦察机","attrs":{"body":{"fill":"FFA500"}}}
+
 
 
 # 删除节点1，成功返回json文本，失败返回0.
-# http://127.0.0.1:8833/delete?func=delete&node_id=S398
+# http://127.0.0.1:8833/delete?func=delete&node_id=0
 
 # 删除节点2,该节点有备份节点，成功返回json文本，失败返回0.
-# http://127.0.0.1:8833/delete?func=delete&node_id=C22
+# http://127.0.0.1:8833/delete?func=delete&node_id=12
+
+
 
 
 # 保存结果，成功返回1，失败返回0.
@@ -29,6 +37,8 @@
 # http://127.0.0.1:8833/save?func=save&path
 # 传入路径
 # http://127.0.0.1:8833/read?func=read&path=C:\Users\dhujq\Desktop\DB\my\脚本
+
+
 
 import tornado.ioloop
 import tornado.web
@@ -80,9 +90,10 @@ class MainHandler(tornado.web.RequestHandler):
         try:
             nodes=GlobalVars.get('nodes')
             edges=GlobalVars.get('edges')
-            edges['labels']=edges['labels'].apply(lambda x:eval(x))
-            edges['attrs']=edges['attrs'].apply(lambda x:eval(x))
-            nodes['attrs']=nodes['attrs'].apply(lambda x:eval(x))
+            if isinstance(edges['labels'].iloc[0],str):
+                edges['labels']=edges['labels'].apply(lambda x:eval(x))
+                edges['attrs']=edges['attrs'].apply(lambda x:eval(x))
+                nodes['attrs']=nodes['attrs'].apply(lambda x:eval(x))
             
             nodes_json=nodes.to_json(orient="records")
             edges_json=edges.to_json(orient="records")
@@ -104,37 +115,47 @@ class MainHandler(tornado.web.RequestHandler):
 
     def update_node(self,new_node_str):
         nodes=GlobalVars.get('nodes')
-        # try:
-        new_node=eval(new_node_str)
-        print(new_node)
-        if new_node['id'] not in set(nodes['id']):
-            return 0
-        else:
-            update_index=nodes.loc[nodes['id']==new_node['id']].index
-            if len(update_index)==1:
-                nodes.loc[update_index]=[new_node[key] for key in nodes.columns]
-                GlobalVars.set('nodes', nodes)
-                return 1
-            else:
+        try:
+            new_node=eval(new_node_str)
+            if new_node['id'] not in set(nodes['id']):
                 return 0
-        # except:
-        #     return 0
-                
+            else:
+                update_index=nodes.loc[nodes['id']==new_node['id']].index
+                if len(update_index)==1:
+                    nodes.loc[update_index]=[new_node[key] for key in nodes.columns]
+                    GlobalVars.set('nodes', nodes)
+                    return 1
+                else:
+                    return 0
+        except:
+            return 0
+
+
     def delete(self,delete):
         try:
             nodes=GlobalVars.get('nodes')
             edges=GlobalVars.get('edges')
+            delete=int(delete)
             if len(edges.loc[(edges['labels']=={'attrs': {'text': {'text': 'backup'}}})&(edges['target']==delete)])>0:
                 backup=edges.loc[(edges['labels']=={'attrs': {'text': {'text': 'backup'}}})&(edges['target']==delete),'source'].iloc[0]
+                print('backup:',backup)
                 backup_edges=edges.loc[(edges['source']!=delete)&(edges['target']!=delete)&((edges['source']==backup)|(edges['target']==backup))]
                 delete_edges=edges.loc[(edges['source']!=backup)&(edges['target']!=backup)&((edges['source']==delete)|(edges['target']==delete))]
                 other_edges=edges.loc[(edges['source']!=backup)&(edges['target']!=backup)&(edges['source']!=delete)&(edges['target']!=delete)]
                 delete_edges=delete_edges.replace(delete, backup)
+
                 mo_edges=pd.concat([backup_edges,delete_edges])
+                mo_edges['labels']=mo_edges['labels'].apply(lambda x:json.dumps(x))
+                mo_edges['attrs']=mo_edges['attrs'].apply(lambda x:json.dumps(x))
                 mo_edges=mo_edges.drop_duplicates()
+
+                mo_edges['labels']=mo_edges['labels'].apply(lambda x:eval(x))
+                mo_edges['attrs']=mo_edges['attrs'].apply(lambda x:eval(x))
+
                 edges=pd.concat([mo_edges,other_edges])
                 nodes=nodes.loc[nodes['id']!=delete]
             else:
+                print('非backup')
                 nodes=nodes.loc[nodes['id']!=delete]
                 edges=edges.loc[(edges['target']!=delete)&(edges['source']!=delete)]
             GlobalVars.set('nodes', nodes)
@@ -168,7 +189,10 @@ class MainHandler(tornado.web.RequestHandler):
             self.finish({'result': result})
         if func=='assess':
             path=self.get_argument('path')
-            assessment = self.assess(path)
+            if path == '':
+                assessment = self.assess()
+            else:
+                assessment = self.assess(path)
             if assessment == {}:
                 result = {'result': 0}
             else:
@@ -176,7 +200,6 @@ class MainHandler(tornado.web.RequestHandler):
                           'content': assessment}
                 result = json.dumps(result, ensure_ascii=False) 
             self.finish(result)
-
 
     def assess(self, path=os.path.abspath(os.path.dirname(__file__))):
         edge_path = os.path.join(path,'edges.csv')
@@ -188,11 +211,10 @@ class MainHandler(tornado.web.RequestHandler):
             print(e)
             return assessment
         return assessment
+
+
  
 if __name__ == "__main__":
-    # _ = os.path.abspath(os.path.dirname(__file__))  # 返回当前文件路径
-    # nodes=pd.read_csv(os.path.join(_,'nodes.csv'),index_col=0)
-    # edges=pd.read_csv(os.path.join(_,'edges.csv'),index_col=0)
 
     application = tornado.web.Application([(r"/read", MainHandler),
         (r"/save", MainHandler),

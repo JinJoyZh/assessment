@@ -71,7 +71,7 @@ def process_data(msg):
     adaptability = 0.33 * edge_num + 0.33 * contivity + 0.33 * average_network_efficiency         
     # h 高效性  根据 (网络重心分布及数量)/介数/连通度 计算                                               
     efficiency = 0.5 * average_network_efficiency + 0.5 * contivity                                                
-    return {"state": "success",
+    return {
             "抗毁性": invulnerability,
             "重组性": recombination,
             "分散性": dispersion,
