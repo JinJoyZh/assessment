@@ -2,52 +2,17 @@
 # -*- coding: utf-8 -*-
 #Author jinqi
 
-# 运行
-# python back.py
-
-
-
-# 读取csv文件，文件与该脚本放在同个文件夹下，成功返回json文本，失败返回0.
-# 无需参数，默认同目录下
-# http://127.0.0.1:8833/read?func=read&path
-# 传入路径
-# http://127.0.0.1:8833/read?func=read&path=C:\Users\dhujq\Desktop\DB\my\脚本
-
-
-
-
-
-# 修改节点（传入的new_node参数为str类型，一次只能改一个节点），成功返回1，失败返回0.
-# fill无#,需要再次处理
-# http://127.0.0.1:8833/update?func=update&new_node={"id":0,"label":"S3","x":1,"y":1,"width":80,"height":40,"shape":"circle","text":"无人侦察机","attrs":{"body":{"fill":"FFA500"}}}
-
-
-
-# 删除节点1，成功返回json文本，失败返回0.
-# http://127.0.0.1:8833/delete?func=delete&node_id=0
-
-# 删除节点2,该节点有备份节点，成功返回json文本，失败返回0.
-# http://127.0.0.1:8833/delete?func=delete&node_id=12
-
-
-
-
-# 保存结果，成功返回1，失败返回0.
-# 无需参数，默认同目录下
-# http://127.0.0.1:8833/save?func=save&path
-# 传入路径
-# http://127.0.0.1:8833/read?func=read&path=C:\Users\dhujq\Desktop\DB\my\脚本
-
-
-
 import tornado.ioloop
 import tornado.web
 import os
 import pandas as pd
 import json
 from assess import process_data
+import time
+import warnings
+warnings.filterwarnings('ignore')
 
-from util.csv_to_json import csv_to_json
+
 
 class GlobalVars:
     _data = {}
@@ -77,8 +42,33 @@ class MainHandler(tornado.web.RequestHandler):
 
     def read(self,path=os.path.abspath(os.path.dirname(__file__))):
         try:
-            nodes=pd.read_csv(os.path.join(path,'nodes.csv'),index_col=0)
-            edges=pd.read_csv(os.path.join(path,'edges.csv'),index_col=0)
+            all_file=os.listdir('./')
+            nodes_file=[i for i in all_file if i.endswith('nodes.xls')]
+            max_time=pd.to_datetime(pd.Series([i[:-10] for i in nodes_file if len(i)>10]),format='%Y-%m-%d-%H_%M_%S').max()
+            if pd.isna(max_time):
+                if 'nodes.xls' in nodes_file:
+                    nodes=pd.read_excel(os.path.join(path,'nodes.xls'),index_col=False)
+                else:
+                    print('不存在nodes.xls,结束')
+                    exit()
+            else:
+                nodes=pd.read_excel(os.path.join(path,max_time.strftime("%Y-%m-%d-%H_%M_%S")+'_nodes.xls'),index_col=False)
+
+            edges_file=[i for i in all_file if i.endswith('edges.xls')]  
+            max_time=pd.to_datetime(pd.Series([i[:-10] for i in edges_file if len(i)>10]),format='%Y-%m-%d-%H_%M_%S').max()
+            if pd.isna(max_time):
+                if 'edges.xls' in edges_file:
+                    edges=pd.read_excel(os.path.join(path,'edges.xls'),index_col=False)
+                else:
+                    print('不存在edges.xls,结束')
+                    exit()
+            else:
+                edges=pd.read_excel(os.path.join(path,max_time.strftime("%Y-%m-%d-%H_%M_%S")+'_edges.xls'),index_col=False)
+
+            nodes['attrs']=nodes['color'].apply(lambda x:{"body": {"fill": x}})
+            del nodes['color']
+            edges['attrs']=edges['attrs'].apply(lambda x:{"line": {"stroke": x}})
+            edges['labels']=edges['labels'].apply(lambda x:[{'attrs': {'text': {'text': x}}}])
             GlobalVars.set('nodes', nodes)
             GlobalVars.set('edges', edges)
             return 1
@@ -90,11 +80,10 @@ class MainHandler(tornado.web.RequestHandler):
         try:
             nodes=GlobalVars.get('nodes')
             edges=GlobalVars.get('edges')
-            if isinstance(edges['labels'].iloc[0],str):
-                edges['labels']=edges['labels'].apply(lambda x:eval(x))
-                edges['attrs']=edges['attrs'].apply(lambda x:eval(x))
-                nodes['attrs']=nodes['attrs'].apply(lambda x:eval(x))
-            
+            # if isinstance(edges['labels'].iloc[0],str):
+            #     edges['labels']=edges['labels'].apply(lambda x:eval(x))
+            #     edges['attrs']=edges['attrs'].apply(lambda x:eval(x))
+            #     nodes['attrs']=nodes['attrs'].apply(lambda x:eval(x))
             nodes_json=nodes.to_json(orient="records")
             edges_json=edges.to_json(orient="records")
             result=json.dumps({'nodes':eval(nodes_json),'edges':eval(edges_json)})
@@ -106,9 +95,15 @@ class MainHandler(tornado.web.RequestHandler):
         try:
             nodes=GlobalVars.get('nodes')
             edges=GlobalVars.get('edges')
-            # _ = os.path.abspath(os.path.dirname(__file__))  # 返回当前文件路径
-            nodes.to_csv(os.path.join(path,'nodes.csv'))
-            edges.to_csv(os.path.join(path,'edges.csv'))
+
+            nodes['color']=nodes['attrs'].apply(lambda x:x['body']['fill'])
+            del nodes['attrs']
+            edges['attrs']=edges['attrs'].apply(lambda x:x["line"]["stroke"])
+            edges['labels']=edges['labels'].apply(lambda x:x[0]['attrs']['text']['text'])
+
+            nodes.to_excel(os.path.join(path,time.strftime("%Y-%m-%d-%H_%M_%S",time.localtime(time.time()))+'_nodes.xls'),index=False)
+            edges.to_excel(os.path.join(path,time.strftime("%Y-%m-%d-%H_%M_%S",time.localtime(time.time()))+'_edges.xls'),index=False)
+
             return 1
         except:
             return 0
@@ -116,7 +111,8 @@ class MainHandler(tornado.web.RequestHandler):
     def update_node(self,new_node_str):
         nodes=GlobalVars.get('nodes')
         try:
-            new_node=eval(new_node_str)
+            # print(new_node_str)
+            new_node=json.loads(new_node_str)
             if new_node['id'] not in set(nodes['id']):
                 return 0
             else:
@@ -136,26 +132,25 @@ class MainHandler(tornado.web.RequestHandler):
             nodes=GlobalVars.get('nodes')
             edges=GlobalVars.get('edges')
             delete=int(delete)
-            if len(edges.loc[(edges['labels']=={'attrs': {'text': {'text': 'backup'}}})&(edges['target']==delete)])>0:
-                backup=edges.loc[(edges['labels']=={'attrs': {'text': {'text': 'backup'}}})&(edges['target']==delete),'source'].iloc[0]
-                print('backup:',backup)
-                backup_edges=edges.loc[(edges['source']!=delete)&(edges['target']!=delete)&((edges['source']==backup)|(edges['target']==backup))]
-                delete_edges=edges.loc[(edges['source']!=backup)&(edges['target']!=backup)&((edges['source']==delete)|(edges['target']==delete))]
-                other_edges=edges.loc[(edges['source']!=backup)&(edges['target']!=backup)&(edges['source']!=delete)&(edges['target']!=delete)]
-                delete_edges=delete_edges.replace(delete, backup)
-
-                mo_edges=pd.concat([backup_edges,delete_edges])
-                mo_edges['labels']=mo_edges['labels'].apply(lambda x:json.dumps(x))
-                mo_edges['attrs']=mo_edges['attrs'].apply(lambda x:json.dumps(x))
-                mo_edges=mo_edges.drop_duplicates()
-
-                mo_edges['labels']=mo_edges['labels'].apply(lambda x:eval(x))
-                mo_edges['attrs']=mo_edges['attrs'].apply(lambda x:eval(x))
-
+            if len(edges.loc[(edges['text']=='reserved')&(edges['target']==delete)])>0:
+                reserved=edges.loc[(edges['text']=='reserved')&(edges['target']==delete),'source'].iloc[0]
+                edges=edges.loc[~((edges['text']=='reserved')&((edges['source']==reserved)|(edges['target']==delete)))]
+                edges=edges.replace(delete,reserved)
+                edges=edges.drop_duplicates(subset=['source','target','text'])
+                nodes=nodes[nodes['id']!=reserved]
+                nodes.loc[nodes['id']==delete,'id']=reserved
+            elif len(edges.loc[(edges['text']=='replace')&(edges['target']==delete)])>0:
+                replace=edges.loc[(edges['text']=='replace')&(edges['target']==delete),'source'].iloc[0]
+                replace_edges=edges.loc[(edges['source']!=delete)&(edges['target']!=delete)&((edges['source']==replace)|(edges['target']==replace))]
+                delete_edges=edges.loc[(edges['source']!=replace)&(edges['target']!=replace)&((edges['source']==delete)|(edges['target']==delete))]
+                other_edges=edges.loc[(edges['source']!=replace)&(edges['target']!=replace)&(edges['source']!=delete)&(edges['target']!=delete)]
+                delete_edges=delete_edges.replace(delete, replace)
+                mo_edges=pd.concat([replace_edges,delete_edges])
                 edges=pd.concat([mo_edges,other_edges])
-                nodes=nodes.loc[nodes['id']!=delete]
+                edges=edges.drop_duplicates(subset=['source','target','text'])
+                nodes=nodes[nodes['id']!=delete]
             else:
-                print('非backup')
+                print('非reserved && 非replace')
                 nodes=nodes.loc[nodes['id']!=delete]
                 edges=edges.loc[(edges['target']!=delete)&(edges['source']!=delete)]
             GlobalVars.set('nodes', nodes)
@@ -198,20 +193,18 @@ class MainHandler(tornado.web.RequestHandler):
             else:
                 result = {'result': 1,
                           'content': assessment}
-                result = json.dumps(result, ensure_ascii=False) 
+                result = json.dumps(result, ensure_ascii=False)
             self.finish(result)
 
     def assess(self, path=os.path.abspath(os.path.dirname(__file__))):
-        edge_path = os.path.join(path,'edges.csv')
+        edge_xls_path = os.path.join(path,'edges.xls')
         assessment = {}
         try:
-            json_str = csv_to_json(edge_path)
-            assessment = process_data(json_str)
+            assessment = process_data(edge_xls_path)
         except Exception as e:
             print(e)
             return assessment
         return assessment
-
 
  
 if __name__ == "__main__":

@@ -2,6 +2,7 @@
 import collections
 import numpy as np
 import networkx as nx
+import pandas as pd
 
 
 from louvain import Louvain
@@ -20,19 +21,23 @@ EDGE_WEIGHTS = {
 }
 
 #构造网络
-def construct_graph(edge_json):#输入初始文件的路径，构造一个有起点、终点、边权的网络
+def construct_graph(xls_file_path):#输入初始文件的路径，构造一个有起点、终点、边权的网络
+    edge_datas = pd.read_excel(xls_file_path)
+    edge_datas = edge_datas.to_dict(orient='index')
+    print(edge_datas)
     G=collections.defaultdict(dict)#设置空白默认字典
-    for edge in edge_json:
+    for index in edge_datas:
+        edge = edge_datas[index]
         v_i=int(edge["source"])
         v_j=int(edge["target"])
         # edge_type = edge["edge_type"]
         w = np.ones(1)
         G[v_i][v_j]=w
         G[v_j][v_i]=w
-    return G
+    return G 
 
-def process_data(msg):
-    G = construct_graph(msg)
+def process_data(xls_file_path):
+    G = construct_graph(xls_file_path)
     algorithm = Louvain(G)
     communities = algorithm.execute() #集群结构       
     #计算基础指标
@@ -81,3 +86,7 @@ def process_data(msg):
             "适应性": adaptability,
             "高效性": efficiency
             }              
+
+if __name__ == "__main__":
+    xls_file_path = "/Users/jinjoy/workspace/效能评估/assessment/edges.xls"
+    construct_graph(xls_file_path)
