@@ -5,7 +5,7 @@ import networkx as nx
 import pandas as pd
 
 
-from louvain import Louvain
+from indicator.louvain import Louvain
 
 
 EDGE_WEIGHTS = {
