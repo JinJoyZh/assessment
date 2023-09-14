@@ -7,29 +7,29 @@ python back.py
 无需参数，默认同目录下
 http://127.0.0.1:8833/read?func=read&path
 传入路径
-http://127.0.0.1:8833/read?func=read&path=C:\Users\dhujq\Desktop\DB\my\脚本_合并
+http://127.0.0.1:8833/read?func=read&path=C:\Users\dhujq\Desktop\DB\my\脚本_合并_new
 
 
 
 
 修改节点（传入的new_node参数为str类型，一次只能改一个节点），成功返回1，失败返回0.
 fill无#,需要再次处理
-http://127.0.0.1:8833/update?func=update&new_node={"id":0,"labels":"S3","x":1,"y":1,"width":80,"height":40,"shape":"circle","text":"无人机","attrs":{"body":{"fill":"FFA500"}},"isReserved":0}
+http://127.0.0.1:8833/update?func=update&new_node={"id":10,"labels":"C2","x":31,"y":451,"width":80,"height":40,"shape":"circle","text":"中继站台","attrs":{"body":{"fill":"000000"}},"isReserved":0}
 
 
 
-删除节点13,该节点有备份节点，接替节点为20
+删除节点2或4,该节点有备份节点，备份节点为0
 成功返回json文本，失败返回0.
-http://127.0.0.1:8833/delete?func=delete&node_id=13
+http://127.0.0.1:8833/delete?func=delete&node_id=2
 
 
-删除节点12,该节点有接替节点，接替节点为11
+删除节点1,该节点有接替节点，接替节点为6
 成功返回json文本，失败返回0.
-http://127.0.0.1:8833/delete?func=delete&node_id=12
+http://127.0.0.1:8833/delete?func=delete&node_id=1
 
 
-删除节点0，成功返回json文本，失败返回0.
-http://127.0.0.1:8833/delete?func=delete&node_id=0
+删除节点10，成功返回json文本，失败返回0.
+http://127.0.0.1:8833/delete?func=delete&node_id=10
 
 
 
@@ -43,11 +43,11 @@ http://127.0.0.1:8833/read?func=read&path=C:\Users\dhujq\Desktop\DB\my\脚本
 
 
 得出图谱评估结果
-无需参数，默认评估同目录下的xls文件
-http://127.0.0.1:8833/assess?func=assess&path
+无需参数，默认评估同目录下的csv文件
+http://127.0.0.1:8833/assess?func=assess
 
 
 
 生成每个节点的贡献度，并查找关键点
 无需参数，默认评估同目录下的xls文件
-http://127.0.0.1:8833/critical_nodes?func=critical_nodes&path
+http://127.0.0.1:8833/assess?func=critical_nodes&threshold=0.0

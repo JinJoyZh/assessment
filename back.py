@@ -7,9 +7,11 @@ import tornado.web
 import os
 import pandas as pd
 import json
-from assess import assess
+from assess import process_data, construct_directed_graph
 import time
 import warnings
+
+from indicator.constribution import identify_critical_nodes
 warnings.filterwarnings('ignore')
 
 
@@ -80,10 +82,6 @@ class MainHandler(tornado.web.RequestHandler):
         try:
             nodes=GlobalVars.get('nodes')
             edges=GlobalVars.get('edges')
-            # if isinstance(edges['labels'].iloc[0],str):
-            #     edges['labels']=edges['labels'].apply(lambda x:eval(x))
-            #     edges['attrs']=edges['attrs'].apply(lambda x:eval(x))
-            #     nodes['attrs']=nodes['attrs'].apply(lambda x:eval(x))
             nodes_json=nodes.to_json(orient="records")
             edges_json=edges.to_json(orient="records")
             result=json.dumps({'nodes':eval(nodes_json),'edges':eval(edges_json)})
@@ -92,26 +90,24 @@ class MainHandler(tornado.web.RequestHandler):
             return 0
         
     def save(self,path=os.path.abspath(os.path.dirname(__file__))):
-        try:
-            nodes=GlobalVars.get('nodes')
-            edges=GlobalVars.get('edges')
+        # try:
+        nodes=GlobalVars.get('nodes')
+        edges=GlobalVars.get('edges')
 
-            nodes['color']=nodes['attrs'].apply(lambda x:x['body']['fill'])
-            del nodes['attrs']
-            edges['attrs']=edges['attrs'].apply(lambda x:x["line"]["stroke"])
-            edges['labels']=edges['labels'].apply(lambda x:x[0]['attrs']['text']['text'])
+        nodes['color']=nodes['attrs'].apply(lambda x:x['body']['fill'])
+        del nodes['attrs']
+        edges['attrs']=edges['attrs'].apply(lambda x:x["line"]["stroke"])
+        edges['labels']=edges['labels'].apply(lambda x:x[0]['attrs']['text']['text'])
 
-            nodes.to_excel(os.path.join(path,time.strftime("%Y-%m-%d-%H_%M_%S",time.localtime(time.time()))+'_nodes.xls'),index=False)
-            edges.to_excel(os.path.join(path,time.strftime("%Y-%m-%d-%H_%M_%S",time.localtime(time.time()))+'_edges.xls'),index=False)
-
-            return 1
-        except:
-            return 0
+        nodes.to_excel(os.path.join(path,time.strftime("%Y-%m-%d-%H_%M_%S",time.localtime(time.time()))+'_nodes.xls'),index=False)
+        edges.to_excel(os.path.join(path,time.strftime("%Y-%m-%d-%H_%M_%S",time.localtime(time.time()))+'_edges.xls'),index=False)
+        return 1
+        # except:
+        #     return 0
 
     def update_node(self,new_node_str):
         nodes=GlobalVars.get('nodes')
         try:
-            # print(new_node_str)
             new_node=json.loads(new_node_str)
             if new_node['id'] not in set(nodes['id']):
                 return 0
@@ -183,29 +179,46 @@ class MainHandler(tornado.web.RequestHandler):
             result=self.delete(node_id)
             self.finish({'result': result})
         if func=='assess':
-            path=self.get_argument('path')
-            if path == '':
-                assessment = self.assess()
-            else:
-                assessment = self.assess(path)
+            assessment = self.assess()
             if assessment == {}:
-                result = {'result': 0}
+                result = {"result": 0}
             else:
-                result = {'result': 1,
-                          'content': assessment}
+                result = {"result": 1,
+                          "content": assessment}
                 result = json.dumps(result, ensure_ascii=False)
             self.finish(result)
-
-    def assess(self, path=os.path.abspath(os.path.dirname(__file__))):
-        edge_xls_path = os.path.join(path,'edges.xls')
+        if func=='critical_nodes':
+            threshold = self.get_argument('threshold')
+            threshold = float(threshold)
+            is_success = self.compute_contributions(threshold)
+            if is_success:
+                json_result=self.dataframe_to_json()
+                self.finish({'result': json_result})
+            
+    def assess(self):
         assessment = {}
         try:
-            edges = pd.read_excel(edge_xls_path)
-            assessment = assess(edges)
+            nodes=GlobalVars.get('nodes')
+            edges=GlobalVars.get('edges')
+            assessment = process_data(nodes, edges)
         except Exception as e:
             print(e)
             return assessment
         return assessment
+    
+    def compute_contributions(self, threshold = 0.0):
+        nodes=GlobalVars.get('nodes')
+        edges=GlobalVars.get('edges')
+        if (nodes is None) or (edges is None):
+            return 0
+        G = construct_directed_graph(nodes, edges)
+        # 识别关键节点
+        critical_marks, contribution_list = identify_critical_nodes(G, threshold)
+        nodes["contribution"] = contribution_list
+        nodes["is_critical"] = critical_marks
+        print(nodes)
+        return 1
+        
 
  
 if __name__ == "__main__":
