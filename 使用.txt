@@ -43,11 +43,17 @@ http://127.0.0.1:8833/read?func=read&path=C:\Users\dhujq\Desktop\DB\my\脚本
 
 
 得出图谱评估结果
-无需参数，默认评估同目录下的csv文件
+无需参数
 http://127.0.0.1:8833/assess?func=assess
 
 
 
 生成每个节点的贡献度，并查找关键点
-无需参数，默认评估同目录下的xls文件
+需要先执行read访问一个图谱，再输入阈值threshold
+返回格式：在read函数返回的json基础上，对每个节点增加了contribution和is_critical两个字段，分别表示节点贡献度，以及该节点是否为关键节点
 http://127.0.0.1:8833/assess?func=critical_nodes&threshold=0.0
+
+将所有节点按照pagerank排序，并查找关键点
+需要先执行read访问一个图谱，再输入排名阈值n作为判断关键点的标准
+返回格式：在read函数返回的json基础上，对每个节点增加了page_rank和critical_page两个字段，分别表示节点重要性排名，以及该节点是否排名前n
+http://127.0.0.1:8833/assess?func=page_rank&top_n=6

@@ -10,6 +10,7 @@ import json
 from assess import process_data, construct_directed_graph
 import time
 import warnings
+import networkx as nx
 
 from indicator.constribution import identify_critical_nodes
 warnings.filterwarnings('ignore')
@@ -194,6 +195,13 @@ class MainHandler(tornado.web.RequestHandler):
             if is_success:
                 json_result=self.dataframe_to_json()
                 self.finish({'result': json_result})
+        if func=='page_rank':
+            top_n = self.get_argument('top_n')
+            top_n = int(top_n)
+            is_success = self.page_rank(top_n)
+            if is_success:
+                json_result=self.dataframe_to_json()
+                self.finish({'result': json_result})
             
     def assess(self):
         assessment = {}
@@ -216,11 +224,30 @@ class MainHandler(tornado.web.RequestHandler):
         critical_marks, contribution_list = identify_critical_nodes(G, threshold)
         nodes["contribution"] = contribution_list
         nodes["is_critical"] = critical_marks
-        print(nodes)
         return 1
-        
+    
+    def page_rank(self, top_n=10):
+        nodes=GlobalVars.get('nodes')
+        edges=GlobalVars.get('edges')
+        if (nodes is None) or (edges is None):
+            return 0
+        G = construct_directed_graph(nodes, edges)
+        # 识别关键节点
+        pr = nx.pagerank(G, alpha=0.9)
+        rank_info = sorted(pr.items(), key=lambda x: x[1], reverse=True)
+        node_num = nodes.shape[0]
+        node_col = [0] * node_num
+        is_critical = [0] * node_num
+        rank = 1
+        for index, _ in rank_info:
+            node_col[index] = rank
+            rank += 1
+            if rank < top_n or rank == top_n:
+                is_critical[index] = 1
+        nodes["page_rank"] = node_col
+        nodes["critical_page"] = is_critical
+        return 1
 
- 
 if __name__ == "__main__":
 
     application = tornado.web.Application([(r"/read", MainHandler),

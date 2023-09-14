@@ -81,18 +81,9 @@ def process_data(node_data_frame, edge_data_frame):
             "高效性": efficiency
             }
 
-# def record_node_contributions(nodes_xls_path, edges_xls_path, threshold = 0.0):
-#     G = construct_directed_graph(nodes_xls_path, edges_xls_path)
-#     # 识别关键节点
-#     critical_marks, contribution_list = identify_critical_nodes(G, threshold)
-#     node_info = pd.read_excel(nodes_xls_path)
-#     node_info["contribution"] = contribution_list
-#     node_info["is_critical"] = critical_marks
-#     node_info.to_excel("./test.xlsx", index=True)
     
 
 if __name__ == "__main__":
     nodes_xls_path = "/Users/jinjoy/workspace/效能评估/assessment/nodes.xls"
     edge_xls_path = "/Users/jinjoy/workspace/效能评估/assessment/edges.xls"
-    record_node_contributions(nodes_xls_path, edge_xls_path, threshold = 0.0)
 

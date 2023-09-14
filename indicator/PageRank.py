@@ -2,7 +2,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 # 创建有标度网络
-N = 1000
+N = 100
 m = 4
 p = 0.2
 ws_graph = nx.watts_strogatz_graph(N, m, p, seed=1)
