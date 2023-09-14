@@ -43,7 +43,11 @@ http://127.0.0.1:8833/read?func=read&path=C:\Users\dhujq\Desktop\DB\my\脚本
 
 
 得出图谱评估结果
-无需参数，默认评估同目录下的csv文件
+无需参数，默认评估同目录下的xls文件
 http://127.0.0.1:8833/assess?func=assess&path
 
 
+
+生成每个节点的贡献度，并查找关键点
+无需参数，默认评估同目录下的xls文件
+http://127.0.0.1:8833/critical_nodes?func=critical_nodes&path

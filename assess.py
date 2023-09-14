@@ -3,45 +3,41 @@ import collections
 import numpy as np
 import networkx as nx
 import pandas as pd
+from indicator.constribution import identify_critical_nodes
 
 
-from indicator.louvain import Louvain
-
-
-EDGE_WEIGHTS = {
-    "C_to_C": np.ones(1),   #edge类型为 通信协同、接替、备份 的权重值
-    "T_to_T": np.ones(1),   #edge类型为 打击协同  的权重值
-    "P_to_C": np.ones(1),   #edge类型为 通信关系  的权重值
-    "S_to_S": np.ones(1),   #edge类型为 侦查协同  的权重值
-    "T_to_T": np.ones(1),   #edge类型为 打击协同  的权重值
-    "S_to_C": np.ones(1),   #edge类型为 信息上报  的权重值
-    "C_to_T": np.ones(1),   #edge类型为 指控关系  的权重值
-    "C_to_P": np.ones(1),   #edge类型为 通信关系  的权重值
-    "P_to_P": np.ones(1)    #edge类型为 指控协同  的权重值
-}
+# EDGE_WEIGHTS = {
+#     "C_to_C": np.ones(1),   #edge类型为 通信协同、接替、备份 的权重值
+#     "T_to_T": np.ones(1),   #edge类型为 打击协同  的权重值
+#     "P_to_C": np.ones(1),   #edge类型为 通信关系  的权重值
+#     "S_to_S": np.ones(1),   #edge类型为 侦查协同  的权重值
+#     "T_to_T": np.ones(1),   #edge类型为 打击协同  的权重值
+#     "S_to_C": np.ones(1),   #edge类型为 信息上报  的权重值
+#     "C_to_T": np.ones(1),   #edge类型为 指控关系  的权重值
+#     "C_to_P": np.ones(1),   #edge类型为 通信关系  的权重值
+#     "P_to_P": np.ones(1)    #edge类型为 指控协同  的权重值
+# }
 
 #构造网络
-def construct_graph(xls_file_path):#输入初始文件的路径，构造一个有起点、终点、边权的网络
-    edge_datas = pd.read_excel(xls_file_path)
-    edge_datas = edge_datas.to_dict(orient='index')
-    print(edge_datas)
-    G=collections.defaultdict(dict)#设置空白默认字典
-    for index in edge_datas:
-        edge = edge_datas[index]
-        v_i=int(edge["source"])
-        v_j=int(edge["target"])
-        # edge_type = edge["edge_type"]
-        w = np.ones(1)
-        G[v_i][v_j]=w
-        G[v_j][v_i]=w
-    return G 
+def construct_directed_graph(nodes_xls_path, edges_xls_path):
+    node_info = pd.read_excel(nodes_xls_path)
+    node_info = node_info.to_dict(orient='index')
+    edge_info = pd.read_excel(edges_xls_path)
+    edge_info = edge_info.to_dict(orient='index')
+    G = nx.DiGraph()
+    for index in node_info:
+        node = node_info[index]
+        G.add_node(node["id"])
+    for index in edge_info:
+        edge = edge_info[index]
+        source = int(edge["source"])
+        target = int(edge["target"])
+        G.add_edge(source, target)
+    return G
 
-def process_data(xls_file_path):
-    G = construct_graph(xls_file_path)
-    algorithm = Louvain(G)
-    communities = algorithm.execute() #集群结构       
+def assess(nodes_xls_path, edges_xls_path):
     #计算基础指标
-    G=nx.to_networkx_graph(G)
+    G = construct_directed_graph(nodes_xls_path, edges_xls_path)
     node_num = len(G.nodes)                                                 # 1 节点数      
     edge_num = len(G.edges)                                                 # 2 度
     degree = sum(dict(nx.degree(G)).values())/len(G.nodes)                  # 6 平均度
@@ -75,7 +71,8 @@ def process_data(xls_file_path):
     # g 适应性  根据 度/连通度/介数/(中立率) 计算                   
     adaptability = 0.33 * edge_num + 0.33 * contivity + 0.33 * average_network_efficiency         
     # h 高效性  根据 (网络重心分布及数量)/介数/连通度 计算                                               
-    efficiency = 0.5 * average_network_efficiency + 0.5 * contivity                                                
+    efficiency = 0.5 * average_network_efficiency + 0.5 * contivity       
+
     return {
             "抗毁性": invulnerability,
             "重组性": recombination,
@@ -85,8 +82,20 @@ def process_data(xls_file_path):
             "灵活性": flexibility,
             "适应性": adaptability,
             "高效性": efficiency
-            }              
+            }
+
+def record_node_contributions(nodes_xls_path, edges_xls_path, threshold = 0.0):
+    G = construct_directed_graph(nodes_xls_path, edges_xls_path)
+    # 识别关键节点
+    critical_marks, contribution_list = identify_critical_nodes(G, threshold)
+    node_info = pd.read_excel(nodes_xls_path)
+    node_info["contribution"] = contribution_list
+    node_info["is_critical"] = critical_marks
+    node_info.to_excel("./test.xlsx", index=True)
+    
 
 if __name__ == "__main__":
-    xls_file_path = "/Users/jinjoy/workspace/效能评估/assessment/edges.xls"
-    construct_graph(xls_file_path)
+    nodes_xls_path = "/Users/jinjoy/workspace/效能评估/assessment/nodes.xls"
+    edge_xls_path = "/Users/jinjoy/workspace/效能评估/assessment/edges.xls"
+    record_node_contributions(nodes_xls_path, edge_xls_path, threshold = 0.0)
+

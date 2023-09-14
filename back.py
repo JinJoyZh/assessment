@@ -7,7 +7,7 @@ import tornado.web
 import os
 import pandas as pd
 import json
-from assess import process_data
+from assess import assess
 import time
 import warnings
 warnings.filterwarnings('ignore')
@@ -200,7 +200,8 @@ class MainHandler(tornado.web.RequestHandler):
         edge_xls_path = os.path.join(path,'edges.xls')
         assessment = {}
         try:
-            assessment = process_data(edge_xls_path)
+            edges = pd.read_excel(edge_xls_path)
+            assessment = assess(edges)
         except Exception as e:
             print(e)
             return assessment
