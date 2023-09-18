@@ -35,6 +35,8 @@ class GlobalVars:
             del cls._data[key]
 
 
+
+
 class MainHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
@@ -53,7 +55,7 @@ class MainHandler(tornado.web.RequestHandler):
                 path='./'
             all_file=os.listdir(path)
             file=[i for i in all_file if i.endswith('raw.xls')]
-            max_time=pd.to_datetime(pd.Series([i[:-10] for i in file if len(i)>7]),format='%Y-%m-%d-%H_%M_%S').max()
+            max_time=pd.to_datetime(pd.Series([i[:-8] for i in file if len(i)>7]),format='%Y-%m-%d-%H_%M_%S').max()
             if pd.isna(max_time):
                 if 'raw.xls' in file:
                     raw=pd.read_excel(os.path.join(path,'raw.xls'),index_col=False)
@@ -94,6 +96,7 @@ class MainHandler(tornado.web.RequestHandler):
             return 1
         except:
             return 0
+
 
 
     def dataframe_to_json(self):
