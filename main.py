@@ -11,6 +11,7 @@ from assess import process_data, construct_directed_graph
 import time
 import warnings
 import networkx as nx
+import numpy as np
 
 from indicator.constribution import identify_critical_nodes
 warnings.filterwarnings('ignore')
@@ -34,8 +35,6 @@ class GlobalVars:
             del cls._data[key]
 
 
-
-
 class MainHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
@@ -45,33 +44,51 @@ class MainHandler(tornado.web.RequestHandler):
 
     def read(self,path=os.path.abspath(os.path.dirname(__file__))):
         try:
-            all_file=os.listdir('./')
-            nodes_file=[i for i in all_file if i.endswith('nodes.xls')]
-            max_time=pd.to_datetime(pd.Series([i[:-10] for i in nodes_file if len(i)>10]),format='%Y-%m-%d-%H_%M_%S').max()
+            nodes=GlobalVars.get('nodes')
+            edges=GlobalVars.get('edges')
+            if nodes is not None:
+                GlobalVars.set("previous_nodes", nodes)
+                GlobalVars.set("previous_edges", edges)
+            if path=='':
+                path='./'
+            all_file=os.listdir(path)
+            file=[i for i in all_file if i.endswith('raw.xls')]
+            max_time=pd.to_datetime(pd.Series([i[:-10] for i in file if len(i)>7]),format='%Y-%m-%d-%H_%M_%S').max()
             if pd.isna(max_time):
-                if 'nodes.xls' in nodes_file:
-                    nodes=pd.read_excel(os.path.join(path,'nodes.xls'),index_col=False)
+                if 'raw.xls' in file:
+                    raw=pd.read_excel(os.path.join(path,'raw.xls'),index_col=False)
                 else:
-                    print('不存在nodes.xls,结束')
+                    print('不存在raw.xls,结束')
                     exit()
             else:
-                nodes=pd.read_excel(os.path.join(path,max_time.strftime("%Y-%m-%d-%H_%M_%S")+'_nodes.xls'),index_col=False)
+                raw=pd.read_excel(os.path.join(path,max_time.strftime("%Y-%m-%d-%H_%M_%S")+'_raw.xls'),index_col=False)
 
-            edges_file=[i for i in all_file if i.endswith('edges.xls')]  
-            max_time=pd.to_datetime(pd.Series([i[:-10] for i in edges_file if len(i)>10]),format='%Y-%m-%d-%H_%M_%S').max()
-            if pd.isna(max_time):
-                if 'edges.xls' in edges_file:
-                    edges=pd.read_excel(os.path.join(path,'edges.xls'),index_col=False)
-                else:
-                    print('不存在edges.xls,结束')
-                    exit()
-            else:
-                edges=pd.read_excel(os.path.join(path,max_time.strftime("%Y-%m-%d-%H_%M_%S")+'_edges.xls'),index_col=False)
+            nodes_list=list(set(raw['目标名称'])|set(raw['关联目标']))
+            nodes_dict=dict([(int(i.split('_')[1]),i.split('_')[0]) for i in nodes_list])
+            nodes=pd.DataFrame(nodes_dict.items(),columns=['id','labels'])
+            nodes=nodes.sort_values('id')
+            nodes.reset_index(inplace=True,drop=True)
+            nodes['text']=nodes['labels']
+            nodes['x']=np.random.randint(0, 1000, size=len(nodes))
+            nodes['y']=np.random.randint(0, 1000, size=len(nodes))
+            nodes['width']=80
+            nodes['width']=40
+            nodes['shape']='circle'
+            nodes['isReserved']=0
+            nodes['attrs']='#000000'
+            nodes['attrs']=nodes['attrs'].apply(lambda x:{"body": {"fill": x}})
 
-            nodes['attrs']=nodes['color'].apply(lambda x:{"body": {"fill": x}})
-            del nodes['color']
-            edges['attrs']=edges['attrs'].apply(lambda x:{"line": {"stroke": x}})
+            edges=raw.copy()
+            edges['source']=edges['目标名称'].apply(lambda x:int(x.split('_')[-1]))
+            edges['target']=edges['关联目标'].apply(lambda x:int(x.split('_')[-1]))
+            edges['text']=edges['关联关系类型']
+            edges['labels']=edges['关联关系类型']
             edges['labels']=edges['labels'].apply(lambda x:[{'attrs': {'text': {'text': x}}}])
+            edges['attrs']='#000000'
+            edges['attrs']=edges['attrs'].apply(lambda x:{"line": {"stroke": x}})
+            nodes.loc[nodes['id'].isin(set(edges.loc[edges['text']=='备份','source'])),'isReserved']=1
+            edges=edges[['source','target','text','labels','attrs']]
+
             GlobalVars.set('nodes', nodes)
             GlobalVars.set('edges', edges)
             return 1
@@ -91,20 +108,22 @@ class MainHandler(tornado.web.RequestHandler):
             return 0
         
     def save(self,path=os.path.abspath(os.path.dirname(__file__))):
-        # try:
-        nodes=GlobalVars.get('nodes')
-        edges=GlobalVars.get('edges')
+        try:
+            nodes=GlobalVars.get('nodes')
+            edges=GlobalVars.get('edges')
 
-        nodes['color']=nodes['attrs'].apply(lambda x:x['body']['fill'])
-        del nodes['attrs']
-        edges['attrs']=edges['attrs'].apply(lambda x:x["line"]["stroke"])
-        edges['labels']=edges['labels'].apply(lambda x:x[0]['attrs']['text']['text'])
+            nodes_dict=dict(zip(nodes['id'],nodes['text']+'_'+nodes['id'].astype(str)))
+            edges['目标名称']=edges['source'].apply(lambda x:nodes_dict[x])
+            edges['关联目标']=edges['target'].apply(lambda x:nodes_dict[x])
+            edges['目标类型']=edges['目标名称'].apply(lambda x:x.split('_')[0])
+            edges['关联关系类型']=edges['labels'].apply(lambda x:x[0]['attrs']['text']['text'])
+            raw=edges[['目标类型','目标名称','关联目标','关联关系类型']]
 
-        nodes.to_excel(os.path.join(path,time.strftime("%Y-%m-%d-%H_%M_%S",time.localtime(time.time()))+'_nodes.xls'),index=False)
-        edges.to_excel(os.path.join(path,time.strftime("%Y-%m-%d-%H_%M_%S",time.localtime(time.time()))+'_edges.xls'),index=False)
-        return 1
-        # except:
-        #     return 0
+            raw.to_excel(os.path.join(path,time.strftime("%Y-%m-%d-%H_%M_%S",time.localtime(time.time()))+'_raw.xls'),
+                index=False,engine='openpyxl')
+            return 1
+        except:
+            return 0
 
     def update_node(self,new_node_str):
         nodes=GlobalVars.get('nodes')
@@ -128,6 +147,8 @@ class MainHandler(tornado.web.RequestHandler):
         try:
             nodes=GlobalVars.get('nodes')
             edges=GlobalVars.get('edges')
+            GlobalVars.set("previous_nodes", nodes)
+            GlobalVars.set("previous_edges", edges)
             delete=int(delete)
             if len(edges.loc[(edges['text']=='reserved')&(edges['target']==delete)])>0:
                 reserved=edges.loc[(edges['text']=='reserved')&(edges['target']==delete),'source'].iloc[0]
@@ -191,17 +212,22 @@ class MainHandler(tornado.web.RequestHandler):
         if func=='critical_nodes':
             threshold = self.get_argument('threshold')
             threshold = float(threshold)
-            is_success = self.compute_contributions(threshold)
+            nodes=GlobalVars.get('nodes')
+            edges=GlobalVars.get('edges')
+            is_success = self.compute_contributions(nodes, edges, threshold)
             if is_success:
                 json_result=self.dataframe_to_json()
                 self.finish({'result': json_result})
-        if func=='page_rank':
-            top_n = self.get_argument('top_n')
-            top_n = int(top_n)
-            is_success = self.page_rank(top_n)
-            if is_success:
-                json_result=self.dataframe_to_json()
-                self.finish({'result': json_result})
+        if func=='efficacy_change':
+            threshold = self.get_argument('threshold')
+            threshold = float(threshold)
+            efficacy_change = self.compute_efficacy_change(threshold)
+            if efficacy_change != float('inf'):
+                result = {
+                    "效能变化": efficacy_change
+                }
+                result = json.dumps(result, ensure_ascii=False)
+                self.finish(result)
             
     def assess(self):
         assessment = {}
@@ -214,9 +240,7 @@ class MainHandler(tornado.web.RequestHandler):
             return assessment
         return assessment
     
-    def compute_contributions(self, threshold = 0.0):
-        nodes=GlobalVars.get('nodes')
-        edges=GlobalVars.get('edges')
+    def compute_contributions(self, nodes, edges, threshold = 0.0):
         if (nodes is None) or (edges is None):
             return 0
         G = construct_directed_graph(nodes, edges)
@@ -225,35 +249,23 @@ class MainHandler(tornado.web.RequestHandler):
         total_score = 0
         for v in contribution_list:
             total_score += v
-        print("compute_contributions totoal socre {}".format(total_score))
         nodes["contribution"] = contribution_list
         nodes["is_critical"] = critical_marks
-        return 1
+        return sum(nodes["contribution"])
     
-    def page_rank(self, top_n=10):
-        nodes=GlobalVars.get('nodes')
-        edges=GlobalVars.get('edges')
-        if (nodes is None) or (edges is None):
-            return 0
-        G = construct_directed_graph(nodes, edges)
-        # 识别关键节点
-        pr = nx.pagerank(G, alpha=0.9)
-        rank_info = sorted(pr.items(), key=lambda x: x[1], reverse=True)
-        node_num = nodes.shape[0]
-        node_col = [0] * node_num
-        is_critical = [0] * node_num
-        rank = 1
-        total_socre = 0
-        for index, value in rank_info:
-            total_socre += value
-            node_col[index] = rank
-            rank += 1
-            if rank < top_n or rank == top_n:
-                is_critical[index] = 1
-        print("page total {}".format(total_socre))
-        nodes["page_rank"] = node_col
-        nodes["critical_page"] = is_critical
-        return 1
+    def compute_efficacy_change(self, threshold = 0.0):
+        previous_nodes = GlobalVars.get('previous_nodes')
+        previous_edges = GlobalVars.get('previous_edges')
+        if previous_nodes is None:
+            return float('inf') 
+        nodes = GlobalVars.get("nodes")
+        edges = GlobalVars.get("edges")
+        previous_efficacy = self.compute_contributions(previous_nodes, previous_edges, threshold) 
+        current_efficacy = self.compute_contributions(nodes, edges, threshold) 
+        efficacy_change = current_efficacy - previous_efficacy
+        efficacy_change = round(efficacy_change, 3)
+        return efficacy_change
+
 
 if __name__ == "__main__":
 
