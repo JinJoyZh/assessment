@@ -1,5 +1,5 @@
 运行
-python back.py
+python main.py
 
 
 
