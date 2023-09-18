@@ -47,7 +47,6 @@ http://127.0.0.1:8833/read?func=read&path=C:\Users\dhujq\Desktop\DB\my\脚本
 http://127.0.0.1:8833/assess?func=assess
 
 
-
 生成每个节点的贡献度，并查找关键点
 需要先执行read访问一个图谱，再输入阈值threshold (注意：若网络复杂度高，存在多个高数值的“度”，则网页服务响应会很慢！)
 返回格式：在read函数返回的json基础上，对每个节点增加了contribution和is_critical两个字段，分别表示节点贡献度，以及该节点是否为关键节点

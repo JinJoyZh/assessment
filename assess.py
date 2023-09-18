@@ -71,14 +71,38 @@ def process_data(node_data_frame, edge_data_frame):
     efficiency = "{:.2f}".format(efficiency) 
 
     return {
-            "抗毁性": invulnerability,
-            "重组性": recombination,
-            "分散性": dispersion,
-            "隐蔽性": concealment,
-            "邻近性": proximity,
-            "灵活性": flexibility,
-            "适应性": adaptability,
-            "高效性": efficiency
+            "抗毁性": {
+                "数值": invulnerability,
+                "依据": "(网络重心分布及数量)/网络连通度/节点链路比/介数"
+            },
+            "重组性": {
+                "数值": recombination,
+                "依据": "(网络重心分布及数量)/连通度"
+            },
+            "分散性": {
+                "数值": dispersion,
+                "依据": "(网络重心分布及数量)/介数/集群数量和规模"
+            },
+            "隐蔽性": {
+                "数值": concealment,
+                "依据": "集群数量和规模/散度"
+            },
+            "邻近性": {
+                "数值": proximity,
+                "依据": "节点数量/(网络重心分布及数量)/集群数量和规模"
+            },
+            "灵活性": {
+                "数值": flexibility,
+                "依据": "度/连通度"
+            },
+            "适应性": {
+                "数值": adaptability,
+                "依据": "度/连通度/介数/(中立率)"
+            },
+            "高效性": {
+                "数值": efficiency,
+                "依据": "(网络重心分布及数量)/介数/连通度"
+            }
             }
 
     

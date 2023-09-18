@@ -222,6 +222,10 @@ class MainHandler(tornado.web.RequestHandler):
         G = construct_directed_graph(nodes, edges)
         # 识别关键节点
         critical_marks, contribution_list = identify_critical_nodes(G, threshold)
+        total_score = 0
+        for v in contribution_list:
+            total_score += v
+        print("compute_contributions totoal socre {}".format(total_score))
         nodes["contribution"] = contribution_list
         nodes["is_critical"] = critical_marks
         return 1
@@ -239,11 +243,14 @@ class MainHandler(tornado.web.RequestHandler):
         node_col = [0] * node_num
         is_critical = [0] * node_num
         rank = 1
-        for index, _ in rank_info:
+        total_socre = 0
+        for index, value in rank_info:
+            total_socre += value
             node_col[index] = rank
             rank += 1
             if rank < top_n or rank == top_n:
                 is_critical[index] = 1
+        print("page total {}".format(total_socre))
         nodes["page_rank"] = node_col
         nodes["critical_page"] = is_critical
         return 1
